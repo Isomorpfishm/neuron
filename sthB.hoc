@@ -1,0 +1,62 @@
+load_file("nrngui.hoc")
+
+ndend = 2
+
+create soma, dend[ndend]
+access soma
+
+proc block_sodium_potassium(){ local block_fraction
+  block_fraction = $1
+  soma gnabar_hh = block_fraction * 0.25 // $1 refers to the first argument of the procedure
+  soma gkbar_hh = $2 * 0.036 // $2 refers to the first argument of the procedure
+}
+
+soma {
+    nseg = 1
+    diam = 18.8
+    L = 18.8
+    Ra = 123.0
+    insert hh
+    block_sodium_potassium(0.15, 0.25) // block Na and K channels to 15% and 25% of their normal value, resp.
+    //gnabar_hh = 0.25
+    gl_hh = .0001666
+    el_hh = -60.0
+}
+
+
+
+dend[0] {
+    nseg = 5
+    diam = 3.18
+    L = 701.9
+    Ra = 123
+}
+
+dend[1] {
+    nseg = 5
+    diam = 2.0
+    L = 549.1
+    Ra = 123
+}
+
+for i = 0, ndend-1 dend[i] {
+  insert pas
+  g_pas = .0001667
+  e_pas = -60.0
+}
+
+// Connect things together
+connect dend[0](0), soma(0)
+connect dend[1](0), soma(1)
+
+// Create an electrode in the soma
+objectvar stim
+stim = new IClamp(0.5)
+
+stim.del = 100
+stim.dur = 100
+stim.amp = 0.1
+
+tstop = 300
+
+xopen("sthB.ses")
