@@ -1,0 +1,110 @@
+// Task 1: Create a three-neuron network
+
+load_file("nrngui.hoc")
+
+begintemplate SThcell
+public soma, dend, axon, nclist
+
+create soma, dend[1], axon
+objectvar nclist
+
+proc init() {
+
+	nsegdend = $1
+	ndend = 2
+
+	create soma, dend[ndend], axon
+
+	nclist = new List()
+
+	soma {
+		nseg = 1
+		diam = 18.8
+		L = 18.8
+		Ra = 123.0
+		insert hh
+		gnabar_hh = 0.25
+		gl_hh = .0001666
+		el_hh = -60.0
+	}
+
+	dend[0] {
+		nseg = nsegdend
+		diam = 3.18
+		L = 701.9
+		Ra = 123
+		insert pas
+		g_pas = .0001666
+		e_pas = -60.0
+	}
+
+	dend[1] {
+		nseg = nsegdend
+		diam = 2.0
+		L = 549.1
+		Ra = 123
+		insert pas
+		g_pas = .0001666
+		e_pas = -60.0
+	}
+
+	axon {
+    	nseg = 50
+    	diam = 10
+    	L = 5000
+    	insert hh
+    	gnabar_hh = 0.25
+		gl_hh = .0001666
+		el_hh = -70.0
+	}
+
+	// Connect things together
+	connect dend[0](0), soma(0)
+	connect dend[1](0), soma(0)
+	connect axon(1), soma(1)
+
+}
+endtemplate SThcell
+
+
+// <------------------------------------------------------------------------------------------------------> 
+
+
+// create three new neurons
+nSThcells = 3
+objectvar SThcells[nSThcells]
+
+// create all three of our cells using the `new` command in a `for` loop
+for i = 0, nSThcells-1 {
+	SThcells[i] = new SThcell(20)
+}
+
+
+// <------------------------------------------------------------------------------------------------------> 
+
+
+maxsyn = 10
+objectvar syn[maxsyn]
+SThcells[0].axon syn[0] = new ExpSyn(0)
+
+// define the source of events for a synapse
+// FORMAT: new NetCon(&source_v, synapse, threshold, delay, weight)
+// to connect SThcells[1] to the proximal end of axon on subthalamic neuron SThcells[0]:
+SThcells[1].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[0], -20, 1, 0.5))
+
+
+
+// <------------------------------------------------------------------------------------------------------> 
+
+objectvar stim[nSThcells]
+
+for i = 0, nSThcells-1 SThcells[i].soma {
+	stim[i] = new IClamp(0.5)
+	stim[i].del = 100
+	stim[i].dur = 100
+	stim[i].amp = 0.1
+	tstop = 300
+}
+
+
+// access SThcells[0].soma
