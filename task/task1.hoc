@@ -3,65 +3,89 @@
 load_file("nrngui.hoc")
 
 begintemplate SThcell
-public soma, dend, axon, nclist
+public soma, dend, axon, nclist, ap
 
-create soma, dend[1], axon
+create soma, dend[2], axon, ap
 objectvar nclist
 
-proc init() {
+proc init() { local i
 
 	nsegdend = $1
 	ndend = 2
 
-	create soma, dend[ndend], axon
+	create soma, dend[ndend], axon, ap
 
 	nclist = new List()
 
 	soma {
-		nseg = 1
-		diam = 18.8
-		L = 18.8
-		Ra = 123.0
+		nseg = 5
+		diam = 20
+		L = 20
+		Ra = 160
+		cm = 1
 		insert hh
-		gnabar_hh = 0.25
-		gl_hh = .0001666
-		el_hh = -60.0
+		gnabar_hh = 0.12
+      	gkbar_hh = 0.036
+      	gl_hh = 0.0003
+      	el_hh = -54.3
+	}
+
+	ap {
+		nseg = nsegdend
+		diam = 2.0
+		L = 400
+		Ra = 160
+		cm = 1
+		insert hh
+		gnabar_hh = 0.012
+      	gkbar_hh = 0.0036
+      	gl_hh = 0.0003
+      	el_hh = -64
 	}
 
 	dend[0] {
 		nseg = nsegdend
-		diam = 3.18
-		L = 701.9
-		Ra = 123
-		insert pas
-		g_pas = .0001666
-		e_pas = -60.0
+		diam = 1.0
+		L = 300
+		Ra = 160
+		cm = 1
+		insert hh
+		gnabar_hh = 0.012
+      	gkbar_hh = 0.0036
+      	gl_hh = 0.0003
+      	el_hh = -64
 	}
 
 	dend[1] {
 		nseg = nsegdend
-		diam = 2.0
-		L = 549.1
-		Ra = 123
-		insert pas
-		g_pas = .0001666
-		e_pas = -60.0
+		diam = 1.0
+		L = 500
+		Ra = 160
+		cm = 1
+		insert hh
+		gnabar_hh = 0.012
+      	gkbar_hh = 0.0036
+      	gl_hh = 0.0003
+      	el_hh = -64
 	}
 
 	axon {
     	nseg = 50
-    	diam = 10
-    	L = 5000
+    	diam = 1
+    	L = 1000
+    	cm = 1
     	insert hh
-    	gnabar_hh = 0.25
-		gl_hh = .0001666
-		el_hh = -70.0
+    	gnabar_hh = 0.12
+      	gkbar_hh = 0.036
+      	gl_hh = 0.0003
+      	el_hh = -54.3
 	}
 
 	// Connect things together
-	connect dend[0](0), soma(0)
-	connect dend[1](0), soma(0)
-	connect axon(1), soma(1)
+	connect ap(0), soma(0)
+	connect axon(0), soma(1)
+	for i = 0, 1 connect dend[i](0), ap(1)
+
 
 }
 endtemplate SThcell
@@ -83,14 +107,14 @@ for i = 0, nSThcells-1 {
 // <------------------------------------------------------------------------------------------------------> 
 
 
-maxsyn = 10
-objectvar syn[maxsyn]
-SThcells[0].axon syn[0] = new ExpSyn(0)
+//maxsyn = 10
+//objectvar syn[maxsyn]
+//SThcells[0].axon syn[0] = new ExpSyn(0)
 
 // define the source of events for a synapse
 // FORMAT: new NetCon(&source_v, synapse, threshold, delay, weight)
 // to connect SThcells[1] to the proximal end of axon on subthalamic neuron SThcells[0]:
-SThcells[1].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[0], -20, 1, 0.5))
+//SThcells[1].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[0], -20, 1, 0.5))
 
 
 
@@ -98,13 +122,13 @@ SThcells[1].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[0], -20, 1, 0.5
 
 objectvar stim[nSThcells]
 
-for i = 0, nSThcells-1 SThcells[i].soma {
-	stim[i] = new IClamp(0.5)
-	stim[i].del = 100
-	stim[i].dur = 100
-	stim[i].amp = 0.1
-	tstop = 300
+for i = 0, nSThcells-1 SThcells[i].axon {
+	stim[i] = new IClamp(0.2)
+	stim[i].del = 1
+	stim[i].dur = 1
+	stim[i].amp = 2
+	tstop = 10
 }
 
 
-// access SThcells[0].soma
+access SThcells[2].axon
