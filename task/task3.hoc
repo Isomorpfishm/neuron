@@ -1,4 +1,4 @@
-// Task 2: Create a four-node neural network with three interconnected neurons in each node
+// Task 3: A four-node neural network with randomness included
 
 load_file("nrngui.hoc")
 
@@ -101,7 +101,7 @@ objectvar SThcells[nSThcells]
 
 // create all three of our cells using the `new` command in a `for` loop
 for i = 0, nSThcells-1 {
-	SThcells[i] = new SThcell(18)
+	SThcells[i] = new SThcell(30)
 }
 
 for i = 0, 2 {
@@ -317,7 +317,7 @@ for (i = 0; i <= 11; i = i + 1) {
 		SThcells[i].dend1 sym[50*i + j - 1] = new ExpSyn(0) 
 	}
 
-	if (i == 0) {
+	if (i == 0 || i == 1 || i == 2) {
 		for k = 1, con {
 			if (k % 3 == 0) {
 				SThcells[i].soma SThcells[3].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
@@ -331,35 +331,8 @@ for (i = 0; i <= 11; i = i + 1) {
 		}
 	}
 
-	if (i == 1) {
-		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[3].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[4].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[5].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-		}
-	}
 
-	if (i == 2) {
-		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[3].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[4].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[5].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-		}
-	}
-
-	if (i == 3) {
+	if (i == 3 || i == 4 || i == 5) {
 		for k = 1, con {
 			if (k % 3 == 0) {
 				SThcells[i].soma SThcells[6].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
@@ -373,35 +346,8 @@ for (i = 0; i <= 11; i = i + 1) {
 		}
 	}
 
-	if (i == 4) {
-		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[6].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[7].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[8].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-		}
-	}
 
-	if (i == 5) {
-		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[6].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[7].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[8].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-		}
-	}
-
-	if (i == 6) {
+	if (i == 6 || i == 7 || i == 8) {
 		for k = 1, con {
 			if (k % 3 == 0) {
 				SThcells[i].soma SThcells[9].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
@@ -415,64 +361,8 @@ for (i = 0; i <= 11; i = i + 1) {
 		}
 	}
 
-	if (i == 7) {
-		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[9].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[10].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[11].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
 
-		}
-	}
-
-	if (i == 8) {
-		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[9].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[10].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[11].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-		}
-	}
-
-	if (i == 9) {
-		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[0].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[1].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[2].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-		}
-	}
-
-	if (i == 10) {
-		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[0].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[1].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[2].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
-			}
-		}
-	} 
-
-	if (i == 11) {
+	if (i == 9 || i == 10 || i == 11) {
 		for k = 1, con {
 			if (k % 3 == 0) {
 				SThcells[i].soma SThcells[0].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
