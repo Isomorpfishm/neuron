@@ -2,6 +2,10 @@
 
 load_file("nrngui.hoc")
 
+//----------------------------------------------------------------------------
+//  create neuronal compartments and insert hh properties
+//----------------------------------------------------------------------------
+
 begintemplate SThcell
 public soma, dend0, dend1, axon, nclist, ap
 
@@ -24,9 +28,9 @@ proc init() { local i
 		cm = 1
 		insert hh
 		gnabar_hh = 0.12
-      	gkbar_hh = 0.036
-      	gl_hh = 0.0003
-      	el_hh = -54.3
+      		gkbar_hh = 0.036
+      		gl_hh = 0.0003
+      		el_hh = -54.3
 	}
 
 	ap {
@@ -37,9 +41,9 @@ proc init() { local i
 		cm = 1
 		insert hh
 		gnabar_hh = 0.012
-      	gkbar_hh = 0.0036
-      	gl_hh = 0.0003
-      	el_hh = -64
+      		gkbar_hh = 0.0036
+      		gl_hh = 0.0003
+      		el_hh = -64
 	}
 
 	dend0 {
@@ -50,9 +54,9 @@ proc init() { local i
 		cm = 1
 		insert hh
 		gnabar_hh = 0.012
-      	gkbar_hh = 0.0036
-      	gl_hh = 0.0003
-      	el_hh = -64
+      		gkbar_hh = 0.0036
+      		gl_hh = 0.0003
+      		el_hh = -64
 	}
 
 	dend1 {
@@ -63,21 +67,21 @@ proc init() { local i
 		cm = 1
 		insert hh
 		gnabar_hh = 0.012
-      	gkbar_hh = 0.0036
-      	gl_hh = 0.0003
-      	el_hh = -64
+      		gkbar_hh = 0.0036
+      		gl_hh = 0.0003
+      		el_hh = -64
 	}
 
 	axon {
-    	nseg = 30
-    	diam = 1
-    	L = 1000
-    	cm = 1
-    	insert hh
-    	gnabar_hh = 0.12
-      	gkbar_hh = 0.036
-      	gl_hh = 0.0003
-      	el_hh = -54.3
+    		nseg = 30
+    		diam = 1
+    		L = 1000
+    		cm = 1
+    		insert hh
+    		gnabar_hh = 0.12
+      		gkbar_hh = 0.036
+      		gl_hh = 0.0003
+      		el_hh = -54.3
 	}
 
 	// Connect things together
@@ -91,19 +95,20 @@ proc init() { local i
 endtemplate SThcell
 
 
-// <------------------------------------------------------------------------------------------------------> 
+//----------------------------------------------------------------------------
+//  Neurons alignment
+//----------------------------------------------------------------------------
 
-////// Topology ///////
 
-// create twelve new neurons
+// create twelve new neurons with 30 segments
 nSThcells = 12
 objectvar SThcells[nSThcells]
 
-// create all three of our cells using the `new` command in a `for` loop
 for i = 0, nSThcells-1 {
 	SThcells[i] = new SThcell(30)
 }
 
+// define spatial arrangement
 for i = 0, 2 {
 	SThcells[i].soma {
 		pt3dclear()
@@ -154,33 +159,37 @@ for i = 9, 11 {
 
 
 
-// <------------------------------------------------------------------------------------------------------> 
+//----------------------------------------------------------------------------
+//  create intranode synapses
+//----------------------------------------------------------------------------
 
 // define the source of events for a synapse
 // FORMAT: new NetCon(&source_v, synapse, threshold, delay, weight)
-// to connect SThcells[1] to the proximal end of axon on subthalamic neuron SThcells[0]:
-//SThcells[1].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[0], -20, 1, 0.5))
 
-
-objectvar syn[600], sym[600], tms
+objectvar syn[240], sym[240], r1, r2
 
 
 for (i = 0; i <= 11; i = i + 1) {
-	tms = new Random()
-	num = tms.uniform(1, 50)
-	con = int(num)
+	r1 = new Random()
+	r2 = new Random()
+	con = r1.discunif(1, 20)
+	wei_up = r2.uniform (0.1, 1)
+	wei_down = r2.repick()
 	
 	for j = 1, con { 
-		SThcells[i].dend0 syn[50*i + j - 1] = new ExpSyn(0) 
+		SThcells[i].dend0 syn[20*i + j - 1] = new ExpSyn(0) 
 	}
 
 	if (i == 0) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[0].soma SThcells[1].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[0].soma SThcells[1].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[0].soma SThcells[2].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[0].soma SThcells[2].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[0].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -188,10 +197,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 1) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[1].soma SThcells[2].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[1].soma SThcells[2].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[1].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[1].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[1].soma SThcells[1].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -199,10 +211,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 2) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[2].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[2].soma SThcells[0].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[2].soma SThcells[1].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[2].soma SThcells[1].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[2].soma SThcells[2].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -210,10 +225,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 3) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[3].soma SThcells[4].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[3].soma SThcells[4].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[3].soma SThcells[5].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[3].soma SThcells[5].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[3].soma SThcells[3].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -221,10 +239,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 4) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[4].soma SThcells[5].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[4].soma SThcells[5].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[4].soma SThcells[3].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[4].soma SThcells[3].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[4].soma SThcells[4].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -232,10 +253,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 5) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[5].soma SThcells[3].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[5].soma SThcells[3].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[5].soma SThcells[4].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[5].soma SThcells[4].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[5].soma SThcells[5].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -243,10 +267,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 6) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[6].soma SThcells[7].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[6].soma SThcells[7].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[6].soma SThcells[8].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[6].soma SThcells[8].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[6].soma SThcells[6].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -254,10 +281,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 7) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[7].soma SThcells[8].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[7].soma SThcells[8].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[8].soma SThcells[6].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[7].soma SThcells[6].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[7].soma SThcells[7].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -265,10 +295,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 8) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[8].soma SThcells[6].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[8].soma SThcells[6].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[8].soma SThcells[7].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[8].soma SThcells[7].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[8].soma SThcells[8].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -276,10 +309,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 9) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[9].soma SThcells[10].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[9].soma SThcells[10].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[9].soma SThcells[11].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[9].soma SThcells[11].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[9].soma SThcells[9].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -287,10 +323,13 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 10) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[10].soma SThcells[11].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[10].soma SThcells[11].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[10].soma SThcells[10].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[10].soma SThcells[10].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[10].soma SThcells[9].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	} 
@@ -298,35 +337,49 @@ for (i = 0; i <= 11; i = i + 1) {
 	if (i == 11) {
 		for k = 1, con {
 			if (k % 3 == 0) {
-				SThcells[11].soma SThcells[9].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[11].soma SThcells[9].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_up))
 			}
 			if (k % 3 == 1) {
-				SThcells[11].soma SThcells[10].nclist.append(new NetCon(&v(1), syn[50*i + k - 1], -65, 1, 1))
+				SThcells[11].soma SThcells[10].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 3 == 2) {
+				SThcells[11].soma SThcells[11].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}     	
 }
 
 
+//----------------------------------------------------------------------------
+//  create internode synapses
+//----------------------------------------------------------------------------
+
+
 for (i = 0; i <= 11; i = i + 1) {
-	tms = new Random()
-	num = tms.uniform(1, 50)
-	con = int(num)
+	r1 = new Random()
+	r2 = new Random()
+	con = r1.discunif(1, 20)
+	wei_up = r2.uniform (0, 1)
+	wei_down = r2.repick()
+	wei_mid = r2.repick()
 	
 	for j = 1, con { 
-		SThcells[i].dend1 sym[50*i + j - 1] = new ExpSyn(0) 
+		SThcells[i].dend1 sym[20*i + j - 1] = new ExpSyn(0) 
 	}
 
 	if (i == 0 || i == 1 || i == 2) {
 		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[3].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 0) {
+				SThcells[i].soma SThcells[3].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_up))
 			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[4].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 1) {
+				SThcells[i].soma SThcells[4].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_mid))
 			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[5].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 2) {
+				SThcells[i].soma SThcells[5].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 4 == 3) {
+				SThcells[i].soma SThcells[i].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -334,14 +387,17 @@ for (i = 0; i <= 11; i = i + 1) {
 
 	if (i == 3 || i == 4 || i == 5) {
 		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[6].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 0) {
+				SThcells[i].soma SThcells[6].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_up))
 			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[7].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 1) {
+				SThcells[i].soma SThcells[7].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_mid))
 			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[8].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 2) {
+				SThcells[i].soma SThcells[8].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 4 == 3) {
+				SThcells[i].soma SThcells[i].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -349,14 +405,17 @@ for (i = 0; i <= 11; i = i + 1) {
 
 	if (i == 6 || i == 7 || i == 8) {
 		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[9].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 0) {
+				SThcells[i].soma SThcells[9].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_up))
 			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[10].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 1) {
+				SThcells[i].soma SThcells[10].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_mid))
 			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[11].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 2) {
+				SThcells[i].soma SThcells[11].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 4 == 3) {
+				SThcells[i].soma SThcells[i].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}
@@ -364,77 +423,35 @@ for (i = 0; i <= 11; i = i + 1) {
 
 	if (i == 9 || i == 10 || i == 11) {
 		for k = 1, con {
-			if (k % 3 == 0) {
-				SThcells[i].soma SThcells[0].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 0) {
+				SThcells[i].soma SThcells[0].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_up))
 			}
-			if (k % 3 == 1) {
-				SThcells[i].soma SThcells[1].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 1) {
+				SThcells[i].soma SThcells[1].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_mid))
 			}
-			if (k % 3 == 2) {
-				SThcells[i].soma SThcells[2].nclist.append(new NetCon(&v(0), sym[50*i + k - 1], -65, 1, 1))
+			if (k % 4 == 2) {
+				SThcells[i].soma SThcells[2].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, wei_down))
+			}
+			if (k % 4 == 3) {
+				SThcells[i].soma SThcells[i].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -60, 1, 0))
 			}
 		}
 	}     	
 }
 
 
-// <------------------------------------------------------------------------------------------------------> 
+//----------------------------------------------------------------------------
+// insert Gfluct process
+//----------------------------------------------------------------------------
 
-////// Simulation ///////
-
-
-objectvar stim[nSThcells]
+objref fl[nSThcells]
 
 for (i = 0; i <= 11; i = i + 1) {
-	SThcells[i].axon stim[i] = new IClamp(0.5)
+	SThcells[i].axon fl[i] = new Gfluct2(0.5)
+	fl[i].std_e = 0.012
+	fl[i].std_i = 0.0264
 }
 
-for (j = 0; j <= 4; j = j + 1) {
-	if (j==0) { 
-		a = 3 
-	} else { 
-		if (j==1) {
-			a = 0
-		} else {
-			if (j==2) {
-				a = 6
-			} else {
-				if (j==3) {
-					a = 9
-				} else {
-					a = 3
-				}
-			}
-		}
-	}
-
-
-	stim[a].del = j * 5
-	stim[a+1].del = j * 5
-	stim[a+2].del = j * 5
-
-	stim[a].dur = 5
-	stim[a+1].dur = 5
-	stim[a+2].dur = 5
-
-	stim[a].amp = 1
-	stim[a+1].amp = 1
-	stim[a+2].amp = 1
-}
-
-
-
-
-
-/*
-objectvar stim
-
-SThcells[0].soma stim = new IClamp(0.5)
-
-stim.del = 100
-stim.dur = 100
-stim.amp = 1
-tstop = 300
-*/
 
 access SThcells[0].soma
+xopen("task3.ses")
