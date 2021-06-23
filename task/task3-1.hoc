@@ -21,7 +21,7 @@ proc init() { local i
 	nclist = new List()
 
 	soma {
-		nseg = 3
+		nseg = 5
 		diam = 20
 		L = 20
 		Ra = 160
@@ -73,7 +73,7 @@ proc init() { local i
 	}
 
 	axon {
-    		nseg = 30
+    		nseg = 50
     		diam = 1
     		L = 1000
     		cm = 1
