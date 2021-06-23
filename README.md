@@ -1,4 +1,4 @@
-# Modelling of in vitro Neuromodulatory Co-culture System
+# Modelling of an in vitro Neuromodulatory Co-culture System
 
 This project is implemented using the [NEURON simulation environment][1] version 8.0 on Windows.
 
