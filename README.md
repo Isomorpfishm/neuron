@@ -11,4 +11,4 @@ This project is implemented using the [NEURON simulation environment][1] version
 * For the intranodel synapses, the number of synapses for even permutations of connection (0 -> 1 -> 2) and odd permutations of connection (1 -> 0 -> 2) was restricted to a maximum of 10 each with randomness applied. Therefore, there would be a maximum of 20 synapses when all 10 odd and even permutations of connection were present, respectively. 
 * Increased randomness for the synaptic transmisson delay (1-5 ms) and the weight (0-1) using the uniform distribution. 
 * Synaptic transmission voltage threshold increased to -55 mV.
-* Modified the number of segments for the neurons' compartments.
+* Modified the number of segments of the neurons' compartments.
