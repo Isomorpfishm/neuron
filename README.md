@@ -4,7 +4,7 @@ This project is implemented using the [NEURON simulation environment][1] version
 
 [1]: https://www.neuron.yale.edu/neuron/
 
-*Update (June 23, 2021):*
+*Update (June 23, 2021) on `task3-1.hoc`:*
 * Inserted `Gfluct.mod` NMODL mechanism to the axon of all 12 neurons in the system. 
 * The IClamp point process was limited at the axon of the first neuron in the first node and spiked only once at the beginning of the simulation.
 * Number of internodal and internodal synapses were decreased to 20 each and the possibilities for zero weight (no connection) were considered.
