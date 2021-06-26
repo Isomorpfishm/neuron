@@ -8,6 +8,7 @@ This project is implemented using the [NEURON simulation environment][1] version
 **Update (June 26, 2021) on `task3-2.hoc`:**
 * Inserted `tmgsyn.mod` NMODL mechanism to the axon of all 12 neurons in the system. 
 * Improved the coding style for generating the intranodal and internodal synapses.
+* Composed a script named `find_signal_peaks.py` to find the peaks of the neuronal transmission voltage.
 
 
 **Update (June 23, 2021) on `task3-1.hoc`:**
