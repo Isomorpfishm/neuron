@@ -9,6 +9,7 @@ This project is implemented using the [NEURON simulation environment][1] version
 * Inserted `tmgsyn.mod` NMODL mechanism to the axon of all 12 neurons in the system. 
 * Improved the coding style for generating the intranodal and internodal synapses.
 
+
 *Update (June 23, 2021) on `task3-1.hoc`:*
 * Inserted `Gfluct.mod` NMODL mechanism to the axon of all 12 neurons in the system. 
 * The IClamp point process was limited at the axon of the first neuron in the first node and spiked only once at the beginning of the simulation.
