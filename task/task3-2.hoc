@@ -159,7 +159,7 @@ r_intra = new Random()
 for (i = 0; i <= 11; i = i + 1) {
 	k1 = r_inter.discunif(0, 10)
 	k2 = r_inter.repick()
-	k3 = r_intra.discunif(1, 20)
+	k3 = r_intra.discunif(0, 20)
 
 	k = 1 
 
@@ -201,24 +201,22 @@ for (i = 0; i <= 11; i = i + 1) {
 		wei = r_intra.uniform(0.0001, 1)
 		delay = r_intra.uniform(1, 5)
 
-		if (k % 4 == 0) {
+		if (k % 3 == 0) {
 			arg = (i+3-temp)%12
 			print "inter-syp from the axon of neuron ", i, " appended to dend1 of neuron ", arg, " +0 loop"
 		}
-		if (k % 4 == 1) {
+		if (k % 3 == 1) {
 			arg = (i+4-temp)%12
 			print "inter-syp from the axon of neuron ", i, " appended to dend1 of neuron ", arg, " +1 loop"
 		}
-		if (k % 4 == 2) {
+		if (k % 3 == 2) {
 			arg = (i+5-temp)%12
 			print "inter-syp from the axon of neuron ", i, " appended to dend1 of neuron ", arg, " +2 loop"
-		}
-		if (k % 4 == 3) {
-			wei = 0
 		}
 
 		SThcells[i].axon SThcells[arg].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay, wei))
 	}
+	print "-----< Neuron ", i, "has ", k1, "even ", k2, "odd intra-syp resp and ", k3, "inter-syp >-----"
 }
 
 
