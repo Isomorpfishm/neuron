@@ -227,11 +227,13 @@ for (i = 0; i <= 11; i = i + 1) {
 
 objref fl[nSThcells]
 objectvar stim[nSThcells]
+objref fac[nSThcells]
 
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
 	fl[i].std_e = 0.012
 	fl[i].std_i = 0.0264
+	SThcells[i].axon fac[i] = new tmgsyn(0.5)
 }
 
 for (i = 0; i <= 2; i = i + 1) SThcells[i].axon {
