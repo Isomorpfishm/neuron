@@ -1,4 +1,5 @@
-// Task 3: A four-node neural network with randomness included
+// Task 3-2: A four-node neural network with randomness included
+// NMODL: Gluct.mod, tmgsyn.mod
 
 load_file("nrngui.hoc")
 
@@ -7,17 +8,15 @@ load_file("nrngui.hoc")
 //----------------------------------------------------------------------------
 
 begintemplate SThcell
-public soma, dend0, dend1, axon, nclist, ap
 
+public soma, dend0, dend1, axon, nclist, ap
 create soma, dend0, dend1, axon, ap
 objectvar nclist
 
 proc init() { local i
-
 	nsegdend = $1
 
 	create soma, dend0, dend1, axon, ap
-
 	nclist = new List()
 
 	soma {
@@ -73,10 +72,10 @@ proc init() { local i
 endtemplate SThcell
 
 
+
 //----------------------------------------------------------------------------
 //  neurons alignment
 //----------------------------------------------------------------------------
-
 
 // create twelve new neurons with 30 segments
 nSThcells = 12
@@ -138,156 +137,90 @@ for i = 9, 11 {
 
 
 //----------------------------------------------------------------------------
-//  create intranodal synapses
+//  create intranodal and internodal synapses
 //----------------------------------------------------------------------------
 
 // define the source of events for a synapse
 // FORMAT: new NetCon(&source_v, synapse, threshold, delay, weight)
 
 // 12 neurons with maximum 20 intranodal and internodal synapses each
-objectvar syn[240], sym[240], r, r1, r2, r3
+objectvar syn[240], sym[240], r_inter, r_intra
 
 for i = 0, 11 {
 	for j = 1, 20 {
 		SThcells[i].dend0 syn[20*i + j - 1] = new ExpSyn(0)
+		SThcells[i].dend1 sym[20*i + j - 1] = new ExpSyn(0)
 	} 
 }
 
-r = new Random()
+r_inter = new Random()
+r_intra = new Random()
 
 for (i = 0; i <= 11; i = i + 1) {
-	k1 = r.discunif(0, 10)
-	k2 = r.repick()
+	k1 = r_inter.discunif(0, 10)
+	k2 = r_inter.repick()
+	k3 = r_intra.discunif(1, 20)
+
 	k = 1 
 
 	if (i == 0 || i == 3 || i == 6 || i == 9) {
 		p = i + 1
 		q = i + 2
+		temp = 0
 	}
 
 	if (i == 1 || i == 4 || i == 7 || i == 10) {
 		p = i - 1
 		q = i + 1
+		temp = 1
 	}
 
 	if (i == 2 || i == 5 || i == 8 || i == 11) {
 		p = i - 1
 		q = i - 2
+		temp = 2
 	}
 
 	while (k <= k1 || k <= k2) {
 		if ((k > k1 && k <= k2) || (k <= k1 && k <= k2)) {
-			wei_up = r.uniform(0.0001, 1)
-			delay_up = r.discunif(1, 5)
+			wei_up = r_inter.uniform(0.0001, 1)
+			delay_up = r_inter.discunif(1, 5)
 			SThcells[i].soma SThcells[p].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -55, delay_up, wei_up))
+			print "intra-syp from the soma of neuron ", i, " appended to dend0 of neuron ", p, " - even perm"
 		}
 		if ((k > k2 && k <= k1) || (k <= k1 && k <= k2)) {
-			wei_down = r.uniform(0.0001, 1)
-			delay_down = r.discunif(1, 5)
+			wei_down = r_inter.uniform(0.0001, 1)
+			delay_down = r_inter.discunif(1, 5)
 			SThcells[i].soma SThcells[q].nclist.append(new NetCon(&v(1), syn[20*i + 10 + k - 1], -55, delay_down, wei_down))
+			print "intra-syp from the soma of neuron ", i, " appended to dend0 of neuron ", q, " - odd perm"
 		}
-		k = k + 1		
+		k += 1		
+	}
+
+	for (k = 1; k <= k3; k = k + 1) {
+		wei = r_intra.uniform(0.0001, 1)
+		delay = r_intra.uniform(1, 5)
+
+		if (k % 4 == 0) {
+			arg = (i+3-temp)%12
+			print "inter-syp from the axon of neuron ", i, " appended to dend1 of neuron ", arg, " +0 loop"
+		}
+		if (k % 4 == 1) {
+			arg = (i+4-temp)%12
+			print "inter-syp from the axon of neuron ", i, " appended to dend1 of neuron ", arg, " +1 loop"
+		}
+		if (k % 4 == 2) {
+			arg = (i+5-temp)%12
+			print "inter-syp from the axon of neuron ", i, " appended to dend1 of neuron ", arg, " +2 loop"
+		}
+		if (k % 4 == 3) {
+			wei = 0
+		}
+
+		SThcells[i].axon SThcells[arg].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay, wei))
 	}
 }
 
-
-
-//----------------------------------------------------------------------------
-//  create internodal synapses
-//----------------------------------------------------------------------------
-
-
-for (i = 0; i <= 11; i = i + 1) {
-	r1 = new Random()
-	r2 = new Random()
-	r3 = new Random()
-
-	con = r1.discunif(1, 20)
-
-	wei_up = r2.uniform (0, 1)
-	wei_down = r2.repick()
-	wei_mid = r2.repick()
-
-	delay_up = r3.discunif(1, 5)
-	delay_down = r3.repick()
-	delay_mid = r3.repick()
-	
-	for j = 1, con { 
-		SThcells[i].dend1 sym[20*i + j - 1] = new ExpSyn(0) 
-	}
-
-	if (i == 0 || i == 1 || i == 2) {
-		for k = 1, con { 
-			if (k % 4 == 0) {
-				SThcells[i].soma SThcells[3].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_up, wei_up))
-			}
-			if (k % 4 == 1) {
-				SThcells[i].soma SThcells[4].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_mid, wei_mid))
-			}
-			if (k % 4 == 2) {
-				SThcells[i].soma SThcells[5].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_down, wei_down))
-			}
-			if (k % 4 == 3) {
-				SThcells[i].soma SThcells[i].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, 1, 0))
-				// 0 weight -> synapse degrades
-			}
-		}
-	}
-
-
-	if (i == 3 || i == 4 || i == 5) {
-		for k = 1, con {
-			if (k % 4 == 0) {
-				SThcells[i].soma SThcells[6].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_up, wei_up))
-			}
-			if (k % 4 == 1) {
-				SThcells[i].soma SThcells[7].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_mid, wei_mid))
-			}
-			if (k % 4 == 2) {
-				SThcells[i].soma SThcells[8].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_down, wei_down))
-			}
-			if (k % 4 == 3) {
-				SThcells[i].soma SThcells[i].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, 1, 0))
-			}
-		}
-	}
-
-
-	if (i == 6 || i == 7 || i == 8) {
-		for k = 1, con {
-			if (k % 4 == 0) {
-				SThcells[i].soma SThcells[9].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_up, wei_up))
-			}
-			if (k % 4 == 1) {
-				SThcells[i].soma SThcells[10].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_mid, wei_mid))
-			}
-			if (k % 4 == 2) {
-				SThcells[i].soma SThcells[11].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_down, wei_down))
-			}
-			if (k % 4 == 3) {
-				SThcells[i].soma SThcells[i].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, 1, 0))
-			}
-		}
-	}
-
-
-	if (i == 9 || i == 10 || i == 11) {
-		for k = 1, con {
-			if (k % 4 == 0) {
-				SThcells[i].soma SThcells[0].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_up, wei_up))
-			}
-			if (k % 4 == 1) {
-				SThcells[i].soma SThcells[1].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_mid, wei_mid))
-			}
-			if (k % 4 == 2) {
-				SThcells[i].soma SThcells[2].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay_down, wei_down))
-			}
-			if (k % 4 == 3) {
-				SThcells[i].soma SThcells[i].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, 1, 0))
-			}
-		}
-	}     	
-}
 
 
 //----------------------------------------------------------------------------
@@ -303,11 +236,12 @@ for (i = 0; i <= 11; i = i + 1) {
 	fl[i].std_i = 0.0264
 }
 
-SThcells[0].axon stim[0] = new IClamp(0.4)
-stim[0].del = 0
-stim[0].dur = 2
-stim[0].amp = 20
-
+for (i = 0; i <= 2; i = i + 1) SThcells[i].axon {
+	stim[i] = new IClamp(0.4)
+	stim[i].del = 2*i
+	stim[i].dur = 2
+	stim[i].amp = 10
+}
 
 access SThcells[0].soma
 xopen("task3.ses")
