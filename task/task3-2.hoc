@@ -82,7 +82,7 @@ nSThcells = 12
 objectvar SThcells[nSThcells]
 
 for i = 0, nSThcells-1 {
-	SThcells[i] = new SThcell(30)
+	SThcells[i] = new SThcell(99)
 }
 
 // define spatial arrangement
@@ -222,12 +222,13 @@ for (i = 0; i <= 11; i = i + 1) {
 
 
 //----------------------------------------------------------------------------
-// insert Gfluct and IClamp point processes
+// insert Gfluct, tmgsyn, and IClamp point processes
 //----------------------------------------------------------------------------
 
 objref fl[nSThcells]
 objectvar stim[nSThcells]
 objref fac[nSThcells]
+
 
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
@@ -236,12 +237,14 @@ for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fac[i] = new tmgsyn(0.5)
 }
 
-for (i = 0; i <= 2; i = i + 1) SThcells[i].axon {
-	stim[i] = new IClamp(0.4)
-	stim[i].del = 2*i
-	stim[i].dur = 2
-	stim[i].amp = 10
-}
+SThcells[0].axon stim[0] = new Ipulse1(0.8)
+stim[0].del = 1
+stim[0].ton = 1
+stim[0].toff = 2
+stim[0].num = 40
+stim[0].amp = 10
+
+
 
 access SThcells[0].soma
 xopen("task3.ses")
