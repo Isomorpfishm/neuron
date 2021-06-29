@@ -3,9 +3,9 @@
 
 load_file("nrngui.hoc")
 
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //  create neuronal compartments and insert hh properties
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 begintemplate SThcell
 
@@ -73,9 +73,9 @@ endtemplate SThcell
 
 
 
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //  neurons alignment
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // create twelve new neurons with 30 segments
 nSThcells = 12
@@ -136,9 +136,9 @@ for i = 9, 11 {
 
 
 
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //  create intranodal and internodal synapses
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // define the source of events for a synapse
 // FORMAT: new NetCon(&source_v, synapse, threshold, delay, weight)
@@ -159,7 +159,7 @@ r_intra = new Random()
 for (i = 0; i <= 11; i = i + 1) {
 	k1 = r_inter.discunif(0, 10)
 	k2 = r_inter.repick()
-	k3 = r_intra.discunif(0, 20)
+	k3 = r_intra.discunif(1, 20)
 
 	k = 1 
 
@@ -221,30 +221,33 @@ for (i = 0; i <= 11; i = i + 1) {
 
 
 
-//----------------------------------------------------------------------------
-// insert Gfluct, tmgsyn, and IClamp point processes
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// insert Gfluct, tmgsyn (excitatory synapses param), and IClamp point processes
+//------------------------------------------------------------------------------
 
 objref fl[nSThcells]
 objectvar stim[nSThcells]
 objref fac[nSThcells]
 
-
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
 	fl[i].std_e = 0.012
 	fl[i].std_i = 0.0264
+
 	SThcells[i].axon fac[i] = new tmgsyn(0.5)
+	fac[i].e = 0
+	fac[i].tau_rec = 800
+	fac[i].tau_facil = 0
+	fac[i].U = 0.5
 }
 
+// a train of spikes
 SThcells[0].axon stim[0] = new Ipulse1(0.8)
-stim[0].del = 1
-stim[0].ton = 1
-stim[0].toff = 2
-stim[0].num = 40
-stim[0].amp = 10
-
-
+stim[0].del = 1    	// starting time
+stim[0].ton = 1		// duration of current pulse
+stim[0].toff = 2	// interpulse interval
+stim[0].num = 40	// number of spikes
+stim[0].amp = 10	// amplitude of spikes
 
 access SThcells[0].soma
 xopen("task3.ses")
