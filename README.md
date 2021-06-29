@@ -6,8 +6,8 @@ This project is implemented using the [NEURON simulation environment][1] version
 
 
 **Update (June 28, 2021) on `task3-2.hoc`:**
-* Inserted `tmgsyn.mod` NMODL mechanism which simulates short-term (excitatory) synaptic plasticity to the axon of all 12 neurons in the system. 
-* Inserted `ipulse1.mod` NMODL mechanism which includes current clamps (point processes) that deliver a sequence of current pulses at regular intervals.
+* Inserted `tmgsyn.mod` which simulates short-term (excitatory) synaptic plasticity to the axon of all 12 neurons in the system. 
+* Inserted `ipulse1.mod` which includes current clamps (point processes) that deliver a sequence of current pulses at regular intervals.
 * Removed the single pulse current clamps.
 * Optimisation on generating the intranodal and internodal synapses.
 * Hodgkin–Huxley model in all compartments were restored to default values.
