@@ -77,7 +77,7 @@ endtemplate SThcell
 //  neurons alignment
 //--------------------------------------------------------------------------------------
 
-// create twelve new neurons with 30 segments
+// create twelve new neurons with 99 segments
 nSThcells = 12
 objectvar SThcells[nSThcells]
 
