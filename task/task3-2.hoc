@@ -83,54 +83,54 @@ objectvar SThcells[nSThcells]
 
 for i = 0, nSThcells-1 {
 	SThcells[i] = new SThcell(99)
-}
 
-// define spatial arrangement
-for i = 0, 2 {
-	SThcells[i].soma {
-		pt3dclear()
-		pt3dadd(-10, 410, 40*i, 20)
-		pt3dadd(10, 410, 40*i, 20)
-	}
-	SThcells[i].axon {
+	// define spatial arrangement
+	if (i == 0 || i == 1 || i == 2) {
+		SThcells[i].soma {
+			pt3dclear()
+			pt3dadd(-10, 410, 40*i, 20)
+			pt3dadd(10, 410, 40*i, 20)
+		}
+		SThcells[i].axon {
 		pt3dadd(10, 410, 40*i, 1)
 		pt3dadd(1010, 410, 40*i, 1)
+		}
 	}
-}
 
-for i = 3, 5 {
-	SThcells[i].soma {
-		pt3dclear()
-		pt3dadd(1010, 10, 40*(i-3), 20)
-		pt3dadd(1010, -10, 40*(i-3), 20)
+	if (i == 3 || i == 4 || i == 5) {
+		SThcells[i].soma {
+			pt3dclear()
+			pt3dadd(1010, 10, 40*(i-3), 20)
+			pt3dadd(1010, -10, 40*(i-3), 20)
+		}
+		SThcells[i].axon {
+			pt3dadd(1010, -10, 40*(i-3), 1)
+			pt3dadd(1010, -1010, 40*(i-3), 1)
+		}
 	}
-	SThcells[i].axon {
-		pt3dadd(1010, -10, 40*(i-3), 1)
-		pt3dadd(1010, -1010, 40*(i-3), 1)
-	}
-}
 
-for i = 6, 8 {
-	SThcells[i].soma {
-		pt3dclear()
-		pt3dadd(610, -1010, 40*(i-6), 20)
-		pt3dadd(590, -1010, 40*(i-6), 20)
-	}
-	SThcells[i].axon {
+	if (i == 6 || i == 7 || i == 8) {
+		SThcells[i].soma {
+			pt3dclear()
+			pt3dadd(610, -1010, 40*(i-6), 20)
+			pt3dadd(590, -1010, 40*(i-6), 20)
+		}
+		SThcells[i].axon {
 		pt3dadd(590, -1010, 40*(i-6), 1)
 		pt3dadd(-410, -1010, 40*(i-6), 1)
-	}
-}
+		}
+	}	
 
-for i = 9, 11 {
-	SThcells[i].soma {
-		pt3dclear()
-		pt3dadd(-410, -610, 40*(i-9), 20)
-		pt3dadd(-410, -590, 40*(i-9), 20)
-	}
-	SThcells[i].axon {
-		pt3dadd(-410, -590, 40*(i-9), 1)
-		pt3dadd(-410, 410, 40*(i-9), 1)
+	if (i == 9 || i == 10 || i == 11) {
+		SThcells[i].soma {
+			pt3dclear()
+			pt3dadd(-410, -610, 40*(i-9), 20)
+			pt3dadd(-410, -590, 40*(i-9), 20)
+		}
+		SThcells[i].axon {
+			pt3dadd(-410, -590, 40*(i-9), 1)
+			pt3dadd(-410, 410, 40*(i-9), 1)
+		}
 	}
 }
 
