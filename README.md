@@ -9,7 +9,7 @@ This project is implemented using the [NEURON simulation environment][1] version
 * Inserted `tmgsyn.mod` which simulates short-term (excitatory) synaptic plasticity to the axon of all 12 neurons in the system. 
 * Inserted `ipulse1.mod` which includes current clamps (point processes) that deliver a sequence of current pulses at regular intervals.
 * Removed the single pulse current clamps.
-* Optimisation on generating the intranodal and internodal synapses.
+* Optimisation on neurons' geometric alignment and the generation of intranodal and internodal synapses.
 * Hodgkin–Huxley model in all compartments were restored to default values.
 * Composed a script named `find_signal_peaks.py` to find the peaks of the neuronal transmission voltage.
 
