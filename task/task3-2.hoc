@@ -235,10 +235,10 @@ for (i = 0; i <= 11; i = i + 1) {
 	fl[i].std_i = 0.0264
 
 	SThcells[i].axon fac[i] = new tmgsyn(0.5)
-	fac[i].e = 0
-	fac[i].tau_rec = 800
-	fac[i].tau_facil = 0
-	fac[i].U = 0.5
+	fac[i].e = 0			// equilibrium
+	fac[i].tau_rec = 800		// recovery
+	fac[i].tau_facil = 0		// decay of facilitation
+	fac[i].U = 0.5			// "facilition" term, 0-1
 
 	if (i == 0 || i == 1 || i == 2) {
 		// a train of spikes
