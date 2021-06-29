@@ -226,8 +226,8 @@ for (i = 0; i <= 11; i = i + 1) {
 //------------------------------------------------------------------------------
 
 objref fl[nSThcells]
-objectvar stim[nSThcells]
 objref fac[nSThcells]
+objectvar stim[nSThcells]
 
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
@@ -239,15 +239,17 @@ for (i = 0; i <= 11; i = i + 1) {
 	fac[i].tau_rec = 800
 	fac[i].tau_facil = 0
 	fac[i].U = 0.5
-}
 
-// a train of spikes
-SThcells[0].axon stim[0] = new Ipulse1(0.8)
-stim[0].del = 1    	// starting time
-stim[0].ton = 1		// duration of current pulse
-stim[0].toff = 2	// interpulse interval
-stim[0].num = 40	// number of spikes
-stim[0].amp = 10	// amplitude of spikes
+	if (i == 0 || i == 1 || i == 2) {
+		// a train of spikes
+		SThcells[i].axon stim[i] = new Ipulse1(0.8)
+		stim[i].del = 1    	// starting time
+		stim[i].ton = 1		// duration of current pulse
+		stim[i].toff = 2	// interpulse interval
+		stim[i].num = 40	// number of spikes
+		stim[i].amp = 10	// amplitude of spikes
+	}
+}
 
 access SThcells[0].soma
 xopen("task3.ses")
