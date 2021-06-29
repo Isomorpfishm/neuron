@@ -1,6 +1,6 @@
 # Modelling of an in vitro Neuromodulatory Co-culture System
 
-This project is implemented using the [NEURON simulation environment][1] version 8.0 on Windows. All of NMODL mechanism files are included in the *task* folder in this repository.
+This project is implemented using the [NEURON simulation environment][1] version 8.0 on Windows. All of NMODL mechanism files are included in the **task_** folder in this repository.
 
 [1]: https://www.neuron.yale.edu/neuron/
 
