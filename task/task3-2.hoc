@@ -1,5 +1,5 @@
 // Task 3-2: A four-node neural network with randomness and synaptic plasticity included
-// NMODL: Gluct.mod, tmgsyn.mod
+// NMODL: Gluct.mod, tmgsyn.mod, IPulse1.mod
 
 load_file("nrngui.hoc")
 
