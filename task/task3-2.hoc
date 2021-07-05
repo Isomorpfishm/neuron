@@ -223,7 +223,7 @@ for (i = 0; i <= 11; i = i + 1) {
 
 
 //--------------------------------------------------------------------------------------
-// insert Gfluct, tmgsyn (excitatory synapses param), and IClamp point processes
+// insert Gfluct, tmgsyn (excitatory synapses param), and IPulse processes/mechanisms
 //--------------------------------------------------------------------------------------
 
 objref fl[nSThcells], fac[nSThcells]
