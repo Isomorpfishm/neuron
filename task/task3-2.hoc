@@ -142,9 +142,12 @@ for i = 0, nSThcells-1 {
 
 // define the source of events for a synapse
 // FORMAT: new NetCon(&source_v, synapse, threshold, delay, weight)
-
 // 12 neurons with maximum 20 intranodal and internodal synapses each
+
 objectvar syn[240], sym[240], r_inter, r_intra
+
+r_inter = new Random()
+r_intra = new Random()
 
 for i = 0, 11 {
 	for j = 1, 20 {
@@ -152,9 +155,6 @@ for i = 0, 11 {
 		SThcells[i].dend1 sym[20*i + j - 1] = new ExpSyn(0)
 	} 
 }
-
-r_inter = new Random()
-r_intra = new Random()
 
 for (i = 0; i <= 11; i = i + 1) {
 	k1 = r_inter.discunif(0, 10)
@@ -216,6 +216,7 @@ for (i = 0; i <= 11; i = i + 1) {
 
 		SThcells[i].axon SThcells[arg].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay, wei))
 	}
+
 	print "-----< Neuron ", i, "has ", k1, "even ", k2, "odd intra-syp resp and ", k3, "inter-syp >-----"
 }
 
@@ -234,9 +235,9 @@ for (i = 0; i <= 11; i = i + 1) {
 	fl[i].std_i = 0.0264
 
 	SThcells[i].axon fac[i] = new tmgsyn(0.5)
-	fac[i].e = 0			// equilibrium
-	fac[i].tau_rec = 800		// recovery
-	fac[i].tau_facil = 0		// decay of facilitation
+	fac[i].e = 0			// equilibrium (default)
+	fac[i].tau_rec = 800		// recovery (default)
+	fac[i].tau_facil = 0		// decay of facilitation (default)
 	fac[i].U = 0.5			// "facilition" term, 0-1
 
 	if (i == 0 || i == 1 || i == 2) {
@@ -245,7 +246,7 @@ for (i = 0; i <= 11; i = i + 1) {
 		stim[i].del = 1    	// starting time
 		stim[i].ton = 1		// duration of current pulse
 		stim[i].toff = 2	// interpulse interval
-		stim[i].num = 40	// number of spikes
+		stim[i].num = 30	// number of spikes
 		stim[i].amp = 10	// amplitude of spikes
 	}
 }
