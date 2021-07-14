@@ -92,8 +92,8 @@ for i = 0, nSThcells-1 {
 			pt3dadd(10, 410, 40*i, 20)
 		}
 		SThcells[i].axon {
-		pt3dadd(10, 410, 40*i, 1)
-		pt3dadd(1010, 410, 40*i, 1)
+			pt3dadd(10, 410, 40*i, 1)
+			pt3dadd(1010, 410, 40*i, 1)
 		}
 	}
 
@@ -180,7 +180,8 @@ for (i = 0; i <= 11; i = i + 1) {
 		q = i - 2
 		temp = 2
 	}
-
+	
+	// intranodes synapses
 	while (k <= k1 || k <= k2) {
 		if ((k > k1 && k <= k2) || (k <= k1 && k <= k2)) {
 			wei_up = r_inter.uniform(0.0001, 1)
@@ -197,6 +198,7 @@ for (i = 0; i <= 11; i = i + 1) {
 		k += 1		
 	}
 
+	// internodes synapses
 	for (k = 1; k <= k3; k = k + 1) {
 		wei = r_intra.uniform(0.0001, 1)
 		delay = r_intra.uniform(1, 5)
@@ -231,14 +233,14 @@ objectvar stim[nSThcells]
 
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
-	fl[i].std_e = 0.012
-	fl[i].std_i = 0.0264
+	fl[i].std_e = 0.012/5
+	fl[i].std_i = 0.0264/5
 
 	SThcells[i].axon fac[i] = new tmgsyn(0.5)
 	fac[i].e = 0			// equilibrium (default)
 	fac[i].tau_rec = 800		// recovery (default)
 	fac[i].tau_facil = 0		// decay of facilitation (default)
-	fac[i].U = 0.5			// "facilition" term, 0-1
+	fac[i].U = 0.9			// "facilition" term, 0-1
 
 	if (i == 0 || i == 1 || i == 2) {
 		// a train of spikes
