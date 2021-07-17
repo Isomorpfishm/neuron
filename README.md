@@ -5,6 +5,10 @@ This project is implemented using the [NEURON simulation environment][1] version
 [1]: https://www.neuron.yale.edu/neuron/
 
 
+**Update (July 17, 2021) on `task4-1.ipynb`:**
+* Created a Jupyter notebook to visualize the simulation results via raster plots (event plots).
+* <span style="color:blue">some *blue* text</span>.
+
 **Update (June 28, 2021) on `task3-2.hoc`:**
 * Inserted `tmgsyn.mod` which simulates short-term (excitatory) synaptic plasticity to the axon of all 12 neurons in the system. 
 * Inserted `ipulse1.mod` which includes current clamps (point processes) that deliver a sequence of current pulses at regular intervals.
