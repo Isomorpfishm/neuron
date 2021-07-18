@@ -8,11 +8,7 @@ This project is implemented using the [NEURON simulation environment][1] version
 **Update (July 17, 2021) on `task4-1.ipynb`:**
 * Created a Jupyter notebook to visualize the simulation results via raster plots (event plots).
 * A sample graph was provided in the **_raster_plot_** folder. 
-* Side note on colored labels corresponding to the multi-electrode array:
-    * Blue  -> top left; 
-    * Red   -> top right; 
-    * Green -> bottom right; 
-    * Black -> bottom left.
+* Please refer to the `README.md` file in the folder for more details.
 
 **Update (June 28, 2021) on `task3-2.hoc`:**
 * Inserted `tmgsyn.mod` which simulates short-term (excitatory) synaptic plasticity to the axon of all 12 neurons in the system. 
