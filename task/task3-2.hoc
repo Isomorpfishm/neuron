@@ -233,14 +233,14 @@ objectvar stim[nSThcells]
 
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
-	fl[i].std_e = 0.012    /5 		// std dev of excitatory conductance
-	fl[i].std_i = 0.0264   *0 		// std dev of inhibitory conductance
-	fl[i].tau_e = 2.728    *5		// time constant of excitatory conductance
-	fl[i].tau_i = 10.49    *0		// time constant of inhibitory conductance
+	fl[i].std_e = 0.012/14		 	// std dev of excitatory conductance
+	fl[i].std_i = 0.0264*0    		// std dev of inhibitory conductance
+	fl[i].tau_e = 2.728*5    		// time constant of excitatory conductance
+	fl[i].tau_i = 10.49*0  			// time constant of inhibitory conductance
 	fl[i].g_e0  = 0.0121			// avg excitatory conductance
-	fl[i].g_i0  = 0.0573   *0		// avg inhibitory conductance
+	fl[i].g_i0  = 0.0573*0   		// avg inhibitory conductance
 	fl[i].E_e   = 0 				// reversal potential of excitatory conductance
-	fl[i].E_i   = -75      *0  		// reversal potential of inhibitory conductance
+	fl[i].E_i   = -75*0        		// reversal potential of inhibitory conductance
 
 	SThcells[i].axon fac[i] = new tmgsyn(0.5)
 	fac[i].e         = 0			// equilibrium (default for excitatory synapses)
@@ -255,10 +255,36 @@ for (i = 0; i <= 11; i = i + 1) {
 		stim[i].del = 1    			// starting time
 		stim[i].ton = 1				// duration of current pulse
 		stim[i].toff = 2			// interpulse interval
-		stim[i].num = 30			// number of spikes
+		stim[i].num = 5				// number of spikes
 		stim[i].amp = 10			// amplitude of spikes
 	}
 }
+
+
+
+//--------------------------------------------------------------------------------------
+// record fluctuating current --- Gfluct[n].i
+//--------------------------------------------------------------------------------------
+
+objref rec_t, rec_i, sav_data
+
+rec_t = new Vector()
+rec_i = new Vector()
+sav_data = new File()
+
+rec_t.record(&t)
+rec_i.record(&Gfluct2[0].i)
+
+sav_data.wopen("Gfluct[0]_current(1).dat")
+printf("\n")
+
+for k=0, rec_t.size()-1 {
+	sav_data.printf("%g %g\n", rec_t.x(k), rec_i.x(k))
+}
+
+sav_data.close()
+
+
 
 access SThcells[0].soma
 xopen("task3.ses")
