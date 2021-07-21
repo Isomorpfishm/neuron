@@ -5,6 +5,13 @@ This project is implemented using the [NEURON simulation environment][1] version
 [1]: https://www.neuron.yale.edu/neuron/
 
 
+**Update (July 21, 2021) on `task3-2.ipynb`:**
+* All `Gfluct` parameters relating to inhibitory synapses were set to zero.
+* Reduced the standard deviation of the exhibitory conductance `std_e` in order to obtain results which reflected in vitro simulations more realistically.
+* The train of spikes were reduced from 100 to 5.
+* Analysing the unrealistic continuous spikes. 
+* Analysing the facilitation variable `U` and its initial value `u0`. 
+
 **Update (July 17, 2021) on `task4-1.ipynb`:**
 * Created a Jupyter notebook to visualize the simulation results via raster plots (event plots).
 * A sample graph was provided in the **_raster_plot_** folder. 
