@@ -251,7 +251,7 @@ for (i = 0; i <= 11; i = i + 1) {
 	fac[i].tau_1	 = 3			// time const of "syp resources" converted from "active" to "inactive" state
 	fac[i].tau_rec   = 800			// time const of "syp resources" converted from "inactive" to "recovered" state
 	fac[i].tau_facil = 0			// time const of decay of facilitation
-	fac[i].U         = 0.09	(1)		// "facilitation variable", <0, 1>
+	fac[i].U         = 0.02	(1)		// "facilitation variable", <0, 1>
 	fac[i].u0        = 0.00 (1)     	// initial value for the "facilitation variable"
 
 	if (i == 0 || i == 1 || i == 2) {
