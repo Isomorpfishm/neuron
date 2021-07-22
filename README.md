@@ -9,6 +9,7 @@ This project is implemented using the [NEURON simulation environment][1] version
 * All `Gfluct.mod` parameters relating to inhibitory synapses were set to zero.
 * Reduced the standard deviation of the exhibitory conductance `std_e` in order to obtain results which reflected *in vitro* simulations more realistically.
 * The train of spikes were reduced from 100 to 5.
+* Modified the mechanism file `Gfluct.mod` in order to record the random numbers generated from further analysis purposes.
 * Tuning the facilitation variable `U`.
 * Analysing the unrealistic burst in continuous current spikes. 
 
