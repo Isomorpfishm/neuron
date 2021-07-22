@@ -5,8 +5,8 @@ This project is implemented using the [NEURON simulation environment][1] version
 [1]: https://www.neuron.yale.edu/neuron/
 
 
-**Update (July 22, 2021) on `task3-2.ipynb`:**
-* All `Gfluct.mod` parameters relating to inhibitory synapses were set to zero.
+**Update (July 22, 2021) on `task3-2.hoc`:**
+* All `Gfluct.mod` parameters relating to inhibitory synapses in the `.hoc` file were set to zero.
 * Reduced the standard deviation of the exhibitory conductance `std_e` in order to obtain results which reflected *in vitro* simulations more realistically.
 * The train of spikes were reduced from 100 to 5.
 * Modified the mechanism file `Gfluct.mod` in order to record the random numbers generated from further analysis purposes.
