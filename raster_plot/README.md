@@ -2,4 +2,4 @@ In the raster plots, I visualised the spikes recorded from the first circuit `da
 
 
 **_Update (July 26, 2021)_**
-* In the latest update, the linestyles (dotted, dashes, dot-dashes) which represents different corner of the electrodes were abolished in order to avoid confusion. Instead, different lengths of lines were used in addition to the colour scheme mentioned above and they were placed on top of each other. The lengths of the coloured lines are arranged in descending order: red, green, cyan and yellow. 
+* In the latest update, the coloured linestyles (dotted, dashes, dot-dashes) which represents different corner of the electrodes in the previous plots were abolished in order to avoid confusion. Instead, different lengths of lines were used in addition to the colour scheme mentioned above and they were placed on top of each other. The lengths of the coloured lines are arranged in descending order: red, green, cyan and yellow. 
