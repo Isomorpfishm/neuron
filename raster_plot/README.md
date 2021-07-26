@@ -1,1 +1,5 @@
 In the raster plots, I visualised the spikes recorded from the first circuit `data[0, :]` or `circuit[0]` under the some randomly selected simulation patterns. The data arrays have dimensions of 10 * 25 * 4, which represents 10 repetitions, 25 time units, and 4 electrode at different corners of the circuit (top left (Tl), top right (Tr), bottom right (Br), and bottom left (Bl)). To plot the diagram more easily, I transposed the data arrays into 4 * 25 * 10. I used four colours (red (R), green (G), cyan(C), and yellow (Y)) to represents the four corners of the circuit, respectively. On the x-axis are the time units the repetitions are placed on the y-axis.
+
+
+**_Update (July 26, 2021)_**
+In the latest update, the linestyles (dotted, dashes, dot-dashes) which represents different corner of the electrodes were abolished in order to avoid confusion. Instead, different lengths of lines were used in addition to the colour scheme mentioned above and they were placed on top of each other. The lengths of the coloured lines are arranged in descending order: red, green, cyan and yellow. 
