@@ -152,7 +152,7 @@ r_inter = new Random()
 r_intra = new Random()
 
 proc synapses() { local run_idx
-	run_idx = $1
+	run_idx = $1  	// run_idx determines how many times to initialize
 	for i = 0, 11 {
 		for j = 1, 20 {
 			SThcells[i].dend0 syn[20*i + j - 1] = new ExpSyn(0)
@@ -161,9 +161,9 @@ proc synapses() { local run_idx
 	}
 
 	for (i = 0; i <= 11; i = i + 1) {
-		k1 = r_inter.discunif(0, 10)
+		k1 = r_inter.discunif(0, 10) 	// allow no-intranodal-synapses scenario
 		k2 = r_inter.repick()
-		k3 = r_intra.discunif(1, 20)
+		k3 = r_intra.discunif(1, 20)	// prevent no-internodal-synapses scenario, must have at least one
 
 		k = 1 
 
@@ -191,7 +191,8 @@ proc synapses() { local run_idx
 				r_inter = new Random()
 				
 				wei_up = r_inter.uniform(0.0001, 1)
-				if (run_idx >= 2) {
+				// if run_ix >= 2 then repick the weights and delays 
+				if (run_idx >= 2) { 
 					for idx = 2, run_idx {
 						wei_up = r_inter.repick()
 					}
@@ -277,7 +278,7 @@ for (i = 0; i <= 11; i = i + 1) {
 	fl[i].tau_i = 10.49*0  			// time const of inhibitory conductance
 	fl[i].g_e0  = 0.0121			// avg excitatory conductance
 	fl[i].g_i0  = 0.0573*0   		// avg inhibitory conductance
-	fl[i].E_e   = 0 				// reversal potential of excitatory conductance
+	fl[i].E_e   = 0 			// reversal potential of excitatory conductance
 	fl[i].E_i   = -75*0        		// reversal potential of inhibitory conductance
 
 	SThcells[i].axon fac[i] = new tmgsyn(0.5)
@@ -290,7 +291,7 @@ for (i = 0; i <= 11; i = i + 1) {
 	fac[i].tau_rec   = 800			// time const of "syp resources" converted from "inactive" to "recovered" state
 	fac[i].tau_facil = 0			// time const of decay of facilitation
 	fac[i].U         = 0.02	(1)		// "facilitation variable", <0, 1>
-	fac[i].u0        = 0.00 (1)     // initial value for the "facilitation variable"
+	fac[i].u0        = 0.00 (1)     	// initial value for the "facilitation variable"
 
 	if (i == 0 || i == 1 || i == 2) {
 		// a train of spikes
@@ -311,7 +312,6 @@ for (i = 0; i <= 11; i = i + 1) {
 
 access SThcells[0].soma
 xopen("task3.ses")
-
 
 
 //--------------------------------------------------------------------------------------
