@@ -5,6 +5,10 @@ This project is implemented using the [NEURON simulation environment][1] version
 [1]: https://www.neuron.yale.edu/neuron/
 
 
+**Update (July 27, 2021) on `task3-3.hoc`:**
+* Saved `Gfluct.mod` random values and the synaptic weights into separated files.
+* Defined `multi_run()` procedure which automated the `run()` process.
+
 **Update (July 22, 2021) on `task3-2.hoc`:**
 * All `Gfluct.mod` parameters relating to inhibitory synapses in the `.hoc` file were set to zero.
 * Reduced the standard deviation of the exhibitory conductance `std_e` in order to obtain results which reflected *in vitro* simulations more realistically.
