@@ -189,16 +189,19 @@ proc synapses() { local run_idx
 		while (k <= k1 || k <= k2) {
 			if ((k > k1 && k <= k2) || (k <= k1 && k <= k2)) {
 				r_inter = new Random()
-				wei_up = r_inter.uniform(0.0001, 1)
 				
-				for idx = 2, run_idx {
-					wei_up = r_inter.repick()
+				wei_up = r_inter.uniform(0.0001, 1)
+				if (run_idx >= 2) {
+					for idx = 2, run_idx {
+						wei_up = r_inter.repick()
+					}
 				}
 
 				delay_up = r_inter.discunif(1, 5)
-
-				for idx = 2, run_idx {
-					delay_up = r_inter.repick()
+				if (run_idx >= 2) {
+					for idx = 2, run_idx {
+						delay_up = r_inter.repick()
+					}
 				}
 				
 				SThcells[i].soma SThcells[p].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -55, delay_up, wei_up))
@@ -208,16 +211,19 @@ proc synapses() { local run_idx
 			
 			if ((k > k2 && k <= k1) || (k <= k1 && k <= k2)) {
 				r_inter = new Random()
-				wei_down = r_inter.uniform(0.0001, 1)
 				
-				for idx = 2, run_idx {
-					wei_down = r_inter.repick()
+				wei_down = r_inter.uniform(0.0001, 1)
+				if (run_idx >= 2) {
+					for idx = 2, run_idx {
+						wei_down = r_inter.repick()
+					}
 				}
 
 				delay_down = r_inter.discunif(1, 5)
-
-				for idx = 2, run_idx {
-					delay_down = r_inter.repick()
+				if (run_idx >= 2) {
+					for idx = 2, run_idx {
+						delay_down = r_inter.repick()
+					}
 				}
 				
 				SThcells[i].soma SThcells[q].nclist.append(new NetCon(&v(1), syn[20*i + 10 + k - 1], -55, delay_down, wei_down))
@@ -253,8 +259,6 @@ proc synapses() { local run_idx
 		print "-----< Neuron ", i, "has ", k1, "even ", k2, "odd intra-syp resp and ", k3, "inter-syp >-----"	
 	}
 }
-
-
 
 
 
@@ -309,6 +313,7 @@ access SThcells[0].soma
 xopen("task3.ses")
 
 
+
 //--------------------------------------------------------------------------------------
 //  initialize: run() and multirun()
 //--------------------------------------------------------------------------------------
@@ -323,7 +328,6 @@ proc run() {
 
 proc multi_run() { local num_run
 	num_run = $1
-
 	for mi = 1, num_run {
 		if (mi == num_run) {
 			f1 = new File()
