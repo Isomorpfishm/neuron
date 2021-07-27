@@ -1,4 +1,4 @@
-// Task 3-3: A four-node neural network with randomness and synaptic plasticity included
+// Task 3-3: The neural network with capability to export weights and random values generated
 // NMODL: Gluct.mod, tmgsyn.mod, IPulse1.mod
 
 load_file("nrngui.hoc")
@@ -152,7 +152,7 @@ r_inter = new Random()
 r_intra = new Random()
 
 proc synapses() { local run_idx
-	run_idx = $1  	// run_idx determines how many times to initialize
+	run_idx = $1  				// run_idx determines how many times to initialize
 	for i = 0, 11 {
 		for j = 1, 20 {
 			SThcells[i].dend0 syn[20*i + j - 1] = new ExpSyn(0)
@@ -188,20 +188,20 @@ proc synapses() { local run_idx
 		// intranodal synapses
 		while (k <= k1 || k <= k2) {
 			if ((k > k1 && k <= k2) || (k <= k1 && k <= k2)) {
-				r_inter = new Random()
+				r_intra = new Random()
 				
-				wei_up = r_inter.uniform(0.0001, 1)
+				wei_up = r_intra.uniform(0.0001, 1)
 				// if run_ix >= 2 then repick the weights and delays 
 				if (run_idx >= 2) { 
 					for idx = 2, run_idx {
-						wei_up = r_inter.repick()
+						wei_up = r_intra.repick()
 					}
 				}
 
-				delay_up = r_inter.discunif(1, 5)
+				delay_up = r_intra.discunif(1, 5)
 				if (run_idx >= 2) {
 					for idx = 2, run_idx {
-						delay_up = r_inter.repick()
+						delay_up = r_intra.repick()
 					}
 				}
 				
@@ -211,19 +211,19 @@ proc synapses() { local run_idx
 			}
 			
 			if ((k > k2 && k <= k1) || (k <= k1 && k <= k2)) {
-				r_inter = new Random()
+				r_intra = new Random()
 				
-				wei_down = r_inter.uniform(0.0001, 1)
+				wei_down = r_intra.uniform(0.0001, 1)
 				if (run_idx >= 2) {
 					for idx = 2, run_idx {
-						wei_down = r_inter.repick()
+						wei_down = r_intra.repick()
 					}
 				}
 
-				delay_down = r_inter.discunif(1, 5)
+				delay_down = r_intra.discunif(1, 5)
 				if (run_idx >= 2) {
 					for idx = 2, run_idx {
-						delay_down = r_inter.repick()
+						delay_down = r_intra.repick()
 					}
 				}
 				
@@ -237,8 +237,8 @@ proc synapses() { local run_idx
 		// internodal synapses
 		for (k = 1; k <= k3; k = k + 1) {
 			for idx = 1, run_idx {
-				wei = r_intra.uniform(0.0001, 1)
-				delay = r_intra.uniform(1, 5)
+				wei = r_inter.uniform(0.0001, 1)
+				delay = r_inter.uniform(1, 5)
 			}
 
 			if (k % 3 == 0) {
@@ -267,8 +267,7 @@ proc synapses() { local run_idx
 // insert Gfluct, tmgsyn (excitatory synapses parameters), IPulse processes/mechanisms
 //--------------------------------------------------------------------------------------
 
-objref fl[nSThcells], fac[nSThcells]
-objectvar stim[nSThcells]
+objref fl[nSThcells], fac[nSThcells], stim[nSThcells]
 
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
