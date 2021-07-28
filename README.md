@@ -8,6 +8,7 @@ This project is implemented using the [NEURON simulation environment][1] version
 **Update (July 27, 2021) on `task3-3.hoc`:**
 * Saved `Gfluct.mod` random values and the synaptic weights into separated files.
 * Defined `multi_run()` procedure which automated the `run()` process.
+* Composed `seed_generator.py` which produces a `seed.dat` file of 1000 randomly generated values to compensate the *pseudo-randomess* of `.hoc` code.
 
 **Update (July 22, 2021) on `task3-2.hoc`:**
 * All `Gfluct.mod` parameters relating to inhibitory synapses in the `.hoc` file were set to zero.
