@@ -1,7 +1,18 @@
 // Task 3-3: Neural network with capability to export weights and random values generated
 // NMODL: Gluct.mod, tmgsyn.mod, IPulse1.mod
+// Seed file: seed.dat
 
 load_file("nrngui.hoc")
+
+//--------------------------------------------------------------------------------------
+//  Access the seed file
+//--------------------------------------------------------------------------------------
+
+objref f, seed_array
+
+f = new File()
+f.ropen("seed.dat")
+
 
 //--------------------------------------------------------------------------------------
 //  create neuronal compartments and insert hh properties
@@ -317,12 +328,7 @@ xopen("task3.ses")
 //  initialize: run() and multirun()
 //--------------------------------------------------------------------------------------
 
-objref rec_t, rec_i_0, rec_i_3, rec_i_6, rec_i_9, sav_data, f
-objref f, seed_array
-
-f = new File()
-f.ropen("seed.dat")
-
+objref rec_t, rec_i_0, rec_i_3, rec_i_6, rec_i_9, sav_data
 
 proc run() {
 	running_ = 1
@@ -378,6 +384,7 @@ proc multi_run() { local num_run
 
 multi_run(2)
 
+f.close()
 f1.close()
 f2.close()
 f_intra.close()
