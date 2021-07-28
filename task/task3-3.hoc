@@ -1,4 +1,4 @@
-// Task 3-3: The neural network with capability to export weights and random values generated
+// Task 3-3: Neural network with capability to export weights and random values generated
 // NMODL: Gluct.mod, tmgsyn.mod, IPulse1.mod
 
 load_file("nrngui.hoc")
@@ -145,14 +145,18 @@ for i = 0, nSThcells-1 {
 // FORMAT: new NetCon(&source_v, synapse, threshold, delay, weight)
 // 12 neurons with maximum 20 intranodal and internodal synapses each
 
-objectvar syn[240], sym[240], r_inter, r_intra
+objectvar syn[240], sym[240], r_inter, r_intra, r_intra_dly, r_intra_wei
 objref f1, f2, f_intra, f_inter
-
-r_inter = new Random()
-r_intra = new Random()
 
 proc synapses() { local run_idx
 	run_idx = $1  				// run_idx determines how many times to initialize
+	seed = $2
+
+	r_inter = new Random(seed)
+	r_intra = new Random(seed)
+	r_intra_dly = new Random(seed)
+	r_intra_wei = new Random(seed)
+	
 	for i = 0, 11 {
 		for j = 1, 20 {
 			SThcells[i].dend0 syn[20*i + j - 1] = new ExpSyn(0)
@@ -174,56 +178,52 @@ proc synapses() { local run_idx
 		}
 
 		if (i == 1 || i == 4 || i == 7 || i == 10) {
-			p = i - 1
-			q = i + 1
+			q = i - 1
+			p = i + 1
 			temp = 1
 		}
 
 		if (i == 2 || i == 5 || i == 8 || i == 11) {
-			p = i - 1
-			q = i - 2
+			q = i - 1
+			p = i - 2
 			temp = 2
 		}
-	
+		
 		// intranodal synapses
 		while (k <= k1 || k <= k2) {
 			if ((k > k1 && k <= k2) || (k <= k1 && k <= k2)) {
-				r_intra = new Random()
+				wei_up = r_intra_wei.uniform(0.0001, 1)
+				delay_up = r_intra_dly.discunif(1, 5)
 				
-				wei_up = r_intra.uniform(0.0001, 1)
 				// if run_ix >= 2 then repick the weights and delays 
 				if (run_idx >= 2) { 
 					for idx = 2, run_idx {
-						wei_up = r_intra.repick()
+						wei_up = r_intra_wei.repick()
 					}
 				}
-
-				delay_up = r_intra.discunif(1, 5)
 				if (run_idx >= 2) {
 					for idx = 2, run_idx {
-						delay_up = r_intra.repick()
+						delay_up = r_intra_dly.repick()
 					}
 				}
 				
 				SThcells[i].soma SThcells[p].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -55, delay_up, wei_up))
 				f1.printf("soma of neuron %d to dend0 of neuron %d - even perm\n", i, p)
 				f_intra.printf("%d\t%d\t%g\n", i, p, wei_up)	
-			}
-			
-			if ((k > k2 && k <= k1) || (k <= k1 && k <= k2)) {
-				r_intra = new Random()
+			} 
+
+			if ((k <= k1 && k > k2) || (k <= k1 && k <= k2)) {
+				wei_down = r_intra_wei.uniform(0.0001, 1)
+				delay_down = r_intra_dly.discunif(1, 5)	
 				
-				wei_down = r_intra.uniform(0.0001, 1)
 				if (run_idx >= 2) {
 					for idx = 2, run_idx {
-						wei_down = r_intra.repick()
+						wei_down = r_intra_wei.repick()
 					}
 				}
-
-				delay_down = r_intra.discunif(1, 5)
 				if (run_idx >= 2) {
 					for idx = 2, run_idx {
-						delay_down = r_intra.repick()
+						delay_down = r_intra_dly.repick()
 					}
 				}
 				
@@ -257,7 +257,7 @@ proc synapses() { local run_idx
 			SThcells[i].axon SThcells[arg].nclist.append(new NetCon(&v(0), sym[20*i + k - 1], -55, delay, wei))
 			f_inter.printf("%d\t%d\t%g\n", i, arg, wei)
 		}
-		print "-----< Neuron ", i, "has ", k1, "even ", k2, "odd intra-syp resp and ", k3, "inter-syp >-----"	
+		print "-----< Neuron ", i, "has ", k1, "odd ", k2, "even intra-syp resp and ", k3, "inter-syp >-----"	
 	}
 }
 
@@ -317,7 +317,12 @@ xopen("task3.ses")
 //  initialize: run() and multirun()
 //--------------------------------------------------------------------------------------
 
-objref rec_t, rec_i_0, rec_i_3, rec_i_6, rec_i_9, sav_data
+objref rec_t, rec_i_0, rec_i_3, rec_i_6, rec_i_9, sav_data, f
+objref f, seed_array
+
+f = new File()
+f.ropen("seed.dat")
+
 
 proc run() {
 	running_ = 1
@@ -328,6 +333,7 @@ proc run() {
 proc multi_run() { local num_run
 	num_run = $1
 	for mi = 1, num_run {
+		seed_val = f.scanvar()
 		if (mi == num_run) {
 			f1 = new File()
 			f2 = new File()
@@ -351,7 +357,7 @@ proc multi_run() { local num_run
 			rec_i_6.record(&Gfluct2[6].rnd)
 			rec_i_9.record(&Gfluct2[9].rnd)
 
-			synapses(mi)
+			synapses(mi, seed_val)
 
 			run()
 
