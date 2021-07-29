@@ -174,10 +174,8 @@ for i = 0, nSThcells-1 {
 objectvar syn[240], sym[240], r_inter, r_intra, r_intra_dly, r_intra_wei
 objref f1, f2, f_intra, f_inter
 
-proc synapses() { local run_idx
-	// run_idx determines how many times to initialize
-	run_idx = $1
-	seed = $2
+proc synapses() { local seed
+	seed = $1
 
 	r_inter = new Random(seed)
 	r_intra = new Random(seed)
@@ -222,18 +220,6 @@ proc synapses() { local run_idx
 				wei_up = r_intra_wei.uniform(0.0001, 1)
 				delay_up = r_intra_dly.discunif(1, 5)
 				
-				// if run_idx >= 2 then repick the weights and delays 
-				if (run_idx >= 2) { 
-					for idx = 2, run_idx {
-						wei_up = r_intra_wei.repick()
-					}
-				}
-				if (run_idx >= 2) {
-					for idx = 2, run_idx {
-						delay_up = r_intra_dly.repick()
-					}
-				}
-				
 				SThcells[i].soma SThcells[p].nclist.append(new NetCon(&v(1), syn[20*i + k - 1], -55, delay_up, wei_up))
 				f1.printf("soma of neuron %d to dend0 of neuron %d - even perm\n", i, p)
 				f_intra.printf("%d\t%d\t%g\n", i, p, wei_up)	
@@ -243,16 +229,6 @@ proc synapses() { local run_idx
 				wei_down = r_intra_wei.uniform(0.0001, 1)
 				delay_down = r_intra_dly.discunif(1, 5)	
 				
-				if (run_idx >= 2) {
-					for idx = 2, run_idx {
-						wei_down = r_intra_wei.repick()
-					}
-				}
-				if (run_idx >= 2) {
-					for idx = 2, run_idx {
-						delay_down = r_intra_dly.repick()
-					}
-				}
 				
 				SThcells[i].soma SThcells[q].nclist.append(new NetCon(&v(1), syn[20*i + 10 + k - 1], -55, delay_down, wei_down))
 				f1.printf("soma of neuron %d to dend0 of neuron %d - odd perm\n", i, q)
@@ -263,11 +239,9 @@ proc synapses() { local run_idx
 
 		// internodal synapses
 		for (k = 1; k <= k3; k = k + 1) {
-			for idx = 1, run_idx {
-				wei = r_inter.uniform(0.0001, 1)
-				delay = r_inter.uniform(1, 5)
-			}
-
+			wei = r_inter.uniform(0.0001, 1)
+			delay = r_inter.uniform(1, 5)
+			
 			if (k % 3 == 0) {
 				arg = (i+3-temp)%12
 				f2.printf("axon of neuron %d to dend1 of neuron %d +0 loop\n", i, arg)
@@ -305,7 +279,7 @@ for (i = 0; i <= 11; i = i + 1) {
 	fl[i].tau_i = 10.49*0  			// time const of inhibitory conductance
 	fl[i].g_e0  = 0.0121			// avg excitatory conductance
 	fl[i].g_i0  = 0.0573*0   		// avg inhibitory conductance
-	fl[i].E_e   = 0 			// reversal potential of excitatory conductance
+	fl[i].E_e   = 0 				// reversal potential of excitatory conductance
 	fl[i].E_i   = -75*0        		// reversal potential of inhibitory conductance
 
 	SThcells[i].axon fac[i] = new tmgsyn(0.5)
@@ -318,7 +292,7 @@ for (i = 0; i <= 11; i = i + 1) {
 	fac[i].tau_rec   = 800			// time const of "syp resources" converted from "inactive" to "recovered" state
 	fac[i].tau_facil = 0			// time const of decay of facilitation
 	fac[i].U         = 0.02	(1)		// "facilitation variable", <0, 1>
-	fac[i].u0        = 0.00 (1)     	// initial value for the "facilitation variable"
+	fac[i].u0        = 0.00 (1)     // initial value for the "facilitation variable"
 
 	if (i == 0 || i == 1 || i == 2) {
 		// a train of spikes
@@ -356,45 +330,39 @@ proc run() {
 proc multi_run() { local num_run
 	num_run = $1
 	
-	for mi = 1, num_run {
-		if (mi == num_run) {
-			f1 = new File()
-			f2 = new File()
-			f_intra = new File()
-			f_inter = new File()
+	f1 = new File()
+	f2 = new File()
+	f_intra = new File()
+	f_inter = new File()
 
-			f1.wopen("intra_syn.txt")
-			f2.wopen("inter_syn.txt")
-			f_intra.wopen("intra_syn_weight.txt")
-			f_inter.wopen("inter_syn_weight.txt")
+	f1.wopen("intra_syn.txt")
+	f2.wopen("inter_syn.txt")
+	f_intra.wopen("intra_syn_weight.txt")
+	f_inter.wopen("inter_syn_weight.txt")
 
-			rec_t = new Vector()
-			rec_i_0 = new Vector()
-			rec_i_3 = new Vector()
-			rec_i_6 = new Vector()
-			rec_i_9 = new Vector()
+	rec_t = new Vector()
+	rec_i_0 = new Vector()
+	rec_i_3 = new Vector()
+	rec_i_6 = new Vector()
+	rec_i_9 = new Vector()
 
-			rec_t.record(&t)
-			rec_i_0.record(&Gfluct2[0].rnd)
-			rec_i_3.record(&Gfluct2[3].rnd)
-			rec_i_6.record(&Gfluct2[6].rnd)
-			rec_i_9.record(&Gfluct2[9].rnd)
+	rec_t.record(&t)
+	rec_i_0.record(&Gfluct2[0].rnd)
+	rec_i_3.record(&Gfluct2[3].rnd)
+	rec_i_6.record(&Gfluct2[6].rnd)
+	rec_i_9.record(&Gfluct2[9].rnd)
 
-			synapses(mi, seed)
+	synapses(seed)
 
-			run()
+	run()
 
-			sav_data = new File()
-			sav_data.aopen("Gfluct[0-3-6-9]_i.txt")
+	sav_data = new File()
+	sav_data.aopen("Gfluct[0-3-6-9]_i.txt")
 
-			printf("\n")
+	printf("\n")
 
-			for k=0, rec_t.size()-1 {
-				sav_data.printf("%g\t%g\t%g\t%g\t%g\n", rec_t.x[k], rec_i_0.x[k], rec_i_3.x[k], rec_i_6.x[k], rec_i_9.x[k])
-			}
-		} else {
-			run() // run only, do not save data here
-		}
+	for k=0, rec_t.size()-1 {
+		sav_data.printf("%g\t%g\t%g\t%g\t%g\n", rec_t.x[k], rec_i_0.x[k], rec_i_3.x[k], rec_i_6.x[k], rec_i_9.x[k])
 	}
 }
 
