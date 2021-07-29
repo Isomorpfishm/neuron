@@ -6,9 +6,9 @@ This project is implemented using the [NEURON simulation environment][1] version
 
 
 **Update (July 27, 2021) on `task3-3.hoc`:**
-* Corrected the errors of producing intranodal synapses.
+* Corrected the errors of producing and classifying intranodal synapses.
 * Saved `Gfluct.mod` random values, intranodal and internodal synaptic weights, and their respective quantities into separated files.
-* Defined `multi_run()` procedure which automated the `run()` process multiple times.
+* Defined `multi_run()` procedure which automated the `run()` process multiple times according to a user's defined input.
 * Composed `seed_generator.py` which uses `random.randrange(sys.maxsize)` to export a `seed.dat` file which is comprised of 1000 randomly generated values to compensate the default *pseudo-randomess* of `.hoc` code. Afterwards, `task3-3.hoc` will scan `seed.dat` and take an integer as seed value.
 
 **Update (July 22, 2021) on `task3-2.hoc`:**
