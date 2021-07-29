@@ -3,6 +3,7 @@
 // Seed file: seed.dat
 
 load_file("nrngui.hoc")
+num_run = 1
 
 //--------------------------------------------------------------------------------------
 //  Access the seed file
@@ -21,11 +22,11 @@ func open_seed() {
 	}
 
 	f.close()
-	print "The seed is, ", seed_val, "."	
 
 	return seed_val
 }
 
+seed = open_seed(num_run)
 
 
 //--------------------------------------------------------------------------------------
@@ -297,7 +298,7 @@ objref fl[nSThcells], fac[nSThcells], stim[nSThcells]
 
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
-	fl[i].seed  = 4321
+	fl[i].seed  = seed
 	fl[i].std_e = 0.012/8		 	// std dev of excitatory conductance
 	fl[i].std_i = 0.0264*0    		// std dev of inhibitory conductance
 	fl[i].tau_e = 2.728*25    		// time const of excitatory conductance
@@ -352,9 +353,8 @@ proc run() {
 	continuerun(tstop)
 }
 
-proc multi_run() { local num_run, seed_val
+proc multi_run() { local num_run
 	num_run = $1
-	seed_val = open_seed(num_run)
 	
 	for mi = 1, num_run {
 		if (mi == num_run) {
@@ -380,7 +380,7 @@ proc multi_run() { local num_run, seed_val
 			rec_i_6.record(&Gfluct2[6].rnd)
 			rec_i_9.record(&Gfluct2[9].rnd)
 
-			synapses(mi, seed_val)
+			synapses(mi, seed)
 
 			run()
 
@@ -399,7 +399,7 @@ proc multi_run() { local num_run, seed_val
 }
 
 
-multi_run(1)
+multi_run(num_run)
 
 f1.close()
 f2.close()
