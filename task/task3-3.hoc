@@ -8,10 +8,24 @@ load_file("nrngui.hoc")
 //  Access the seed file
 //--------------------------------------------------------------------------------------
 
-objref f, seed_array
+objref f
 
-f = new File()
-f.ropen("seed.dat")
+func open_seed() {
+	num_run = $1
+
+	f = new File()
+	f.ropen("seed.dat")
+
+	for mi = 1, num_run {
+		seed_val = f.scanvar()
+	}
+
+	f.close()
+	print "The seed is, ", seed_val, "."	
+
+	return seed_val
+}
+
 
 
 //--------------------------------------------------------------------------------------
@@ -283,7 +297,8 @@ objref fl[nSThcells], fac[nSThcells], stim[nSThcells]
 
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
-	fl[i].std_e = 0.012/7		 	// std dev of excitatory conductance
+	fl[i].seed  = 4321
+	fl[i].std_e = 0.012/8		 	// std dev of excitatory conductance
 	fl[i].std_i = 0.0264*0    		// std dev of inhibitory conductance
 	fl[i].tau_e = 2.728*25    		// time const of excitatory conductance
 	fl[i].tau_i = 10.49*0  			// time const of inhibitory conductance
@@ -337,10 +352,11 @@ proc run() {
 	continuerun(tstop)
 }
 
-proc multi_run() { local num_run
+proc multi_run() { local num_run, seed_val
 	num_run = $1
+	seed_val = open_seed(num_run)
+	
 	for mi = 1, num_run {
-		seed_val = f.scanvar()
 		if (mi == num_run) {
 			f1 = new File()
 			f2 = new File()
@@ -383,9 +399,8 @@ proc multi_run() { local num_run
 }
 
 
-multi_run(2)
+multi_run(1)
 
-f.close()
 f1.close()
 f2.close()
 f_intra.close()
