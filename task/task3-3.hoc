@@ -160,7 +160,8 @@ objectvar syn[240], sym[240], r_inter, r_intra, r_intra_dly, r_intra_wei
 objref f1, f2, f_intra, f_inter
 
 proc synapses() { local run_idx
-	run_idx = $1  				// run_idx determines how many times to initialize
+	// run_idx determines how many times to initialize
+	run_idx = $1
 	seed = $2
 
 	r_inter = new Random(seed)
@@ -206,7 +207,7 @@ proc synapses() { local run_idx
 				wei_up = r_intra_wei.uniform(0.0001, 1)
 				delay_up = r_intra_dly.discunif(1, 5)
 				
-				// if run_ix >= 2 then repick the weights and delays 
+				// if run_idx >= 2 then repick the weights and delays 
 				if (run_idx >= 2) { 
 					for idx = 2, run_idx {
 						wei_up = r_intra_wei.repick()
