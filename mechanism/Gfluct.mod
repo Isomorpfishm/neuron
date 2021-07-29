@@ -91,7 +91,7 @@ INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
 NEURON {
 	POINT_PROCESS Gfluct2
 	RANGE g_e, g_i, E_e, E_i, g_e0, g_i0, g_e1, g_i1, rnd
-	RANGE std_e, std_i, tau_e, tau_i, D_e, D_i
+	RANGE std_e, std_i, tau_e, tau_i, D_e, D_i, seed
 	RANGE new_seed
 	NONSPECIFIC_CURRENT i
 }
@@ -116,6 +116,8 @@ PARAMETER {
 
 	tau_e	= 2.728	(ms)	: time constant of excitatory conductance
 	tau_i	= 10.49	(ms)	: time constant of inhibitory conductance
+
+	seed  = 1234
 }
 
 ASSIGNED {
@@ -135,6 +137,7 @@ ASSIGNED {
 }
 
 INITIAL {
+	new_seed(seed)
 	g_e1 = 0
 	g_i1 = 0
 	if(tau_e != 0) {
@@ -185,10 +188,3 @@ PROCEDURE new_seed(seed) {		: procedure to set the seed
 	  printf("Setting random generator with seed = %g\n", _lseed);
 	ENDVERBATIM
 }
-
-
-
-
-
-
-
