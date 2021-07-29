@@ -10,6 +10,7 @@ This project is implemented using the [NEURON simulation environment][1] version
 * Saved `Gfluct.mod` random values, intranodal and internodal synaptic weights, and their respective quantities into separated files.
 * Defined `multi_run()` procedure which automated the `run()` process multiple times according to a user's defined input.
 * Composed `seed_generator.py` which uses `random.randrange(sys.maxsize)` to export a `seed.dat` file which is comprised of 1000 randomly generated values to compensate the default *pseudo-randomess* of `.hoc` code. Afterwards, `task3-3.hoc` will scan `seed.dat` and take an integer as seed value.
+* The seed value taken will affect the number of synapses, weights, and the `normrand()` function in `Gfluct.mod`.
 
 **Update (July 22, 2021) on `task3-2.hoc`:**
 * All `Gfluct.mod` parameters relating to inhibitory synapses in the `.hoc` file were set to zero.
