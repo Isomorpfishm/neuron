@@ -3,7 +3,7 @@
 // Seed file: seed.dat
 
 load_file("nrngui.hoc")
-num_run = 1
+num_run = 123
 
 //--------------------------------------------------------------------------------------
 //  Access the seed file
@@ -273,9 +273,9 @@ objref fl[nSThcells], fac[nSThcells], stim[nSThcells]
 for (i = 0; i <= 11; i = i + 1) {
 	SThcells[i].axon fl[i] = new Gfluct2(0.5)
 	fl[i].seed  = seed
-	fl[i].std_e = 0.012/8		 	// std dev of excitatory conductance
+	fl[i].std_e = 0.012		 	// std dev of excitatory conductance
 	fl[i].std_i = 0.0264*0    		// std dev of inhibitory conductance
-	fl[i].tau_e = 2.728*25    		// time const of excitatory conductance
+	fl[i].tau_e = 2.728    			// time const of excitatory conductance
 	fl[i].tau_i = 10.49*0  			// time const of inhibitory conductance
 	fl[i].g_e0  = 0.0121			// avg excitatory conductance
 	fl[i].g_i0  = 0.0573*0   		// avg inhibitory conductance
@@ -291,16 +291,16 @@ for (i = 0; i <= 11; i = i + 1) {
 	fac[i].tau_1	 = 3			// time const of "syp resources" converted from "active" to "inactive" state
 	fac[i].tau_rec   = 800			// time const of "syp resources" converted from "inactive" to "recovered" state
 	fac[i].tau_facil = 0			// time const of decay of facilitation
-	fac[i].U         = 0.02	(1)		// "facilitation variable", <0, 1>
+	fac[i].U         = 0.05	(1)		// "facilitation variable", <0, 1>
 	fac[i].u0        = 0.00 (1)     	// initial value for the "facilitation variable"
 
 	if (i == 0 || i == 1 || i == 2) {
 		// a train of spikes
 		SThcells[i].axon stim[i] = new Ipulse1(0.8)
-		stim[i].del = 1    			// starting time
-		stim[i].ton = 1				// duration of current pulse
-		stim[i].toff = 2			// interpulse interval
-		stim[i].num = 5				// number of spikes
+		stim[i].del = 0    			// starting time
+		stim[i].ton = 0.5			// duration of current pulse
+		stim[i].toff = 0.5			// interpulse interval
+		stim[i].num = 3				// number of spikes
 		stim[i].amp = 0.2			// amplitude of spikes
 	}
 }
@@ -320,6 +320,9 @@ xopen("task3-3.ses")
 //--------------------------------------------------------------------------------------
 
 objref rec_t, rec_i_0, rec_i_3, rec_i_6, rec_i_9, sav_data
+objref recv0, recv1, recv2, recv3, recv4, recv5
+objref recv6, recv7, recv8, recv9, recv10, recv11
+objref voltage_tl, voltage_tr, voltage_bl, voltage_br
 
 proc run() {
 	running_ = 1
@@ -351,17 +354,60 @@ proc multi_run() {
 	rec_i_6.record(&Gfluct2[6].rnd)
 	rec_i_9.record(&Gfluct2[9].rnd)
 
+	recv0 = new Vector()
+	recv1 = new Vector()
+	recv2 = new Vector()
+	recv3 = new Vector()
+	recv4 = new Vector()
+	recv5 = new Vector()
+	recv6 = new Vector()
+	recv7 = new Vector()
+	recv8 = new Vector()
+	recv9 = new Vector()
+	recv10 = new Vector()
+	recv11 = new Vector()
+
+	recv0.record(&SThcells[0].axon.v(0.25))
+	recv1.record(&SThcells[1].axon.v(0.25))
+	recv2.record(&SThcells[2].axon.v(0.25))
+	recv3.record(&SThcells[3].axon.v(0.25))
+	recv4.record(&SThcells[4].axon.v(0.25))
+	recv5.record(&SThcells[5].axon.v(0.25))
+	recv6.record(&SThcells[6].axon.v(0.25))
+	recv7.record(&SThcells[7].axon.v(0.25))
+	recv8.record(&SThcells[8].axon.v(0.25))
+	recv9.record(&SThcells[9].axon.v(0.25))
+	recv10.record(&SThcells[10].axon.v(0.25))
+	recv11.record(&SThcells[11].axon.v(0.25))
+
 	synapses(seed)
 
 	run()
 
+	voltage_tl = new File()
+	voltage_tr = new File()
+	voltage_bl = new File()
+	voltage_br = new File()
+
+	voltage_tl.wopen("data_tl.txt")
+	voltage_tr.wopen("data_tr.txt")
+	voltage_bl.wopen("data_bl.txt")
+	voltage_br.wopen("data_br.txt")
+
 	sav_data = new File()
 	sav_data.aopen("Gfluct[0-3-6-9]_i.txt")
 
-	printf("\n")
+	voltage_tl.printf("time\tneuron9\tneuron10\tneuron11\n")
+	voltage_tr.printf("time\tneuron0\tneuron1\tneuron2\n")
+	voltage_br.printf("time\tneuron3\tneuron4\tneuron5\n")
+	voltage_bl.printf("time\tneuron6\tneuron7\tneuron8\n")
 
 	for k=0, rec_t.size()-1 {
 		sav_data.printf("%g\t%g\t%g\t%g\t%g\n", rec_t.x[k], rec_i_0.x[k], rec_i_3.x[k], rec_i_6.x[k], rec_i_9.x[k])
+		voltage_tl.printf("%g\t%g\t%g\t%g\n", rec_t.x[k], recv9.x[k], recv10.x[k], recv11.x[k])
+		voltage_tr.printf("%g\t%g\t%g\t%g\n", rec_t.x[k], recv0.x[k], recv1.x[k], recv2.x[k])
+		voltage_br.printf("%g\t%g\t%g\t%g\n", rec_t.x[k], recv3.x[k], recv4.x[k], recv5.x[k])
+		voltage_bl.printf("%g\t%g\t%g\t%g\n", rec_t.x[k], recv6.x[k], recv7.x[k], recv8.x[k])
 	}
 }
 
@@ -373,5 +419,10 @@ f2.close()
 f_intra.close()
 f_inter.close()
 sav_data.close()
+
+voltage_tl.close()
+voltage_tr.close()
+voltage_br.close()
+voltage_bl.close()
 
 print "Rec_t size is ", rec_t.size(), "and rec_i_0 size is ", rec_i_0.size()
