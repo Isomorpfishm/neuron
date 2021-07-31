@@ -5,13 +5,15 @@ This project is implemented using the [NEURON simulation environment][1] version
 [1]: https://www.neuron.yale.edu/neuron/
 
 
+**Update (July 31, 2021) on `task3-3.hoc`:**
+* Modified the code so that it is able to export voltage measured at all 12 neurons automatically.
+
 **Update (July 27, 2021) on `task3-3.hoc`:**
 * Corrected the errors of producing and classifying intranodal synapses.
 * Saved `Gfluct.mod` random values, intranodal and internodal synaptic weights, and their respective quantities into separated files.
 * Defined `multi_run()` procedure which automated the `run()` and data exportation processes.
 * Composed `seed_generator.py` which uses `random.randrange(sys.maxsize)` to export a `seed.dat` file which is comprised of 1000 randomly generated values to compensate the default *pseudo-randomess* of `.hoc` code. Afterwards, `task3-3.hoc` will scan `seed.dat` and take an integer as seed value.
 * The seed value taken will affect the number of synapses, weights, and the `normrand()` function in `Gfluct.mod`.
-* The duration of simulation was shortened to 25 ms and the IPulse train stimulations were nulled to simulate `ID=0`.
 
 **Update (July 22, 2021) on `task3-2.hoc`:**
 * All `Gfluct.mod` parameters relating to inhibitory synapses in the `.hoc` file were set to zero.
