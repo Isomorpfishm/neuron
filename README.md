@@ -6,7 +6,8 @@ This project is implemented using the [NEURON simulation environment][1] version
 
 
 **Update (July 31, 2021) on `task3-3.hoc`:**
-* Modified the code so that it is able to export voltage measured at all 12 neurons automatically.
+* Modified the `.hoc` code so that it is able to export voltages measured at the axon (normalised distance of 0.25 from the distal end) of all 12 neurons automatically.
+* To mimic the *in vitro* experimental data, the standard deviation and the time constant of excitatory conductance were restored to their default values.
 
 **Update (July 27, 2021) on `task3-3.hoc`:**
 * Corrected the errors of producing and classifying intranodal synapses.
