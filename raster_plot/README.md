@@ -2,7 +2,9 @@ In the raster plots, I visualised the spikes recorded from the first circuit `da
 
 
 **_Update (August 1, 2021) on `Task4-2.ipynb`_**
-* We made a notebook that streamlined the entire simulation process, from reading the simulated data (voltage) to plot a simulated diagram of calculated voltages in all four corners. Moreover, we calculated the probability of spikes and plot the raster plot of the simulated results. 
+* In this update, we made a notebook that streamlined the entire simulation process, from reading the simulated data (voltage) plotting a simulated neuron (average) potential graph. Here, the term *average* means we take the mean of the potential of three neurons' axon in each respective corner. *Refer to `spike_demo.png`.*  
+* Moreover, we calculated the probability of spikes based on the simulated results (average) and made a raster plot.
+* The rest of work was identical to `Task4-1.ipynb`.
 
 **_Update (July 31, 2021) on `Task4-1.ipynb`_**
 * In the latest update, a threshold of probability greater than or equal to 0.1 was implemented to the experimental data. That is, if a data point has value greater than or equal to 0.1, it was considered a spike, otherwise it was discarded. However, to prevent 0.1 being normalised to zero (normalisation due to the fact it was needed to show the transparency in the event plot), i.e., [0.1, ~] normalised to [0, 1], we decreased the lower limit to 0.09 so that the 0.1 points will not vanish while producing the raster plot. For those values greater than or equal to 0.1, we scaled the features to lie between the range of zero and one `[0, 1]`, using Python's Scikit-Learn library `sklearn.preprocessing.MinMaxScaler()` to achieve this. The motivation to use this scaling include robustness to very small standard deviations of features and preserving zero entries in sparse data.
