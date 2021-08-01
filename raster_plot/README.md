@@ -1,3 +1,5 @@
+# Visualisation of the simulated results
+
 In the raster plots, I visualised the spikes recorded from the first circuit `data[0, :]` or `circuit[0]` under the some randomly selected simulation patterns. The data arrays have dimensions of 10 * 25 * 4, which represents 10 repetitions, 25 time units, and 4 electrode at different corners of the circuit (top left (Tl), top right (Tr), bottom right (Br), and bottom left (Bl)). To plot the diagram more easily, I transposed the data arrays into 4 * 25 * 10 and utilised the following four colours: red (R), green (G), blue(B), and orange (O) to represents the four corners of the circuit, respectively. On the x-axis are the time units while the ten repetitions are placed on the y-axis.
 
 
@@ -12,3 +14,9 @@ In the raster plots, I visualised the spikes recorded from the first circuit `da
 
 **_Update (July 26, 2021) on `Task4-1.ipynb`_**
 * In the latest update, the coloured, half-transparent linestyles (dotted, dashes, dot-dashes) which represents different corner of the electrodes in the previous plots were abolished in order to avoid confusion. Instead, different lengths of solid lines were used in addition to the colour scheme mentioned above and they were placed on top of each other. The lengths of the coloured lines are arranged in descending order: red, green, cyan and yellow. 
+
+## Other relevant files in this directory.
+* `circuit[*] ID[**].png` is the raster plot of `circuit[*]` based on the simulation pattern `ID[**]`.
+* `find_signal_peaks.py` is the Python file on finding the peaks of the potential.
+* `find_signal_peaks_demo.py` is a sample of the output graph from `find_signal_peaks.py`.
+
