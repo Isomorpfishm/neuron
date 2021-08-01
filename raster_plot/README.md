@@ -1,4 +1,4 @@
-# Visualisation of the simulated results
+# Visualisation of the simulation results
 
 In the raster plots, I visualised the spikes recorded from the first circuit `data[0, :]` or `circuit[0]` under the some randomly selected simulation patterns. The data arrays have dimensions of 10 * 25 * 4, which represents 10 repetitions, 25 time units, and 4 electrode at different corners of the circuit (top left (Tl), top right (Tr), bottom right (Br), and bottom left (Bl)). To plot the diagram more easily, I transposed the data arrays into 4 * 25 * 10 and utilised the following four colours: red (R), green (G), blue(B), and orange (O) to represents the four corners of the circuit, respectively. On the x-axis are the time units while the ten repetitions are placed on the y-axis.
 
