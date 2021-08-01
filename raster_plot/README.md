@@ -17,6 +17,6 @@ In the raster plots, I visualised the spikes recorded from the first circuit `da
 
 ## Other relevant files in this directory.
 * `circuit[*] ID[**].png` is the raster plot of `circuit[*]` based on the simulation pattern `ID[**]`.
-* `find_signal_peaks.py` is the Python file on finding the peaks of the potential.
+* `find_signal_peaks.py` is the Python file about finding the peaks of the neuron's potential.
 * `find_signal_peaks_demo.py` is a sample of the output graph from `find_signal_peaks.py`.
 
