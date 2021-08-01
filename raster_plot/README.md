@@ -15,7 +15,7 @@ In the raster plots, I visualised the spikes recorded from the first circuit `da
 **_Update (July 26, 2021) on `Task4-1.ipynb`_**
 * In the latest update, the coloured, half-transparent linestyles (dotted, dashes, dot-dashes) which represents different corner of the electrodes in the previous plots were abolished in order to avoid confusion. Instead, different lengths of solid lines were used in addition to the colour scheme mentioned above and they were placed on top of each other. The lengths of the coloured lines are arranged in descending order: red, green, cyan and yellow. 
 
-## Other relevant files in this directory.
+## Other relevant files in this directory
 * `circuit[*] ID[**].png` is the raster plot of `circuit[*]` based on the simulation pattern `ID[**]`.
 * `find_signal_peaks.py` is the Python file about finding the peaks of the neuron's potential.
 * `find_signal_peaks_demo.py` is a sample of the output graph from `find_signal_peaks.py`.
