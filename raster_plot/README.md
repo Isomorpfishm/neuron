@@ -3,7 +3,7 @@ In the raster plots, I visualised the spikes recorded from the first circuit `da
 
 **_Update (August 1, 2021) on `Task4-2.ipynb`_**
 * In this update, we made a notebook that streamlined the entire simulation process, from reading the simulated data (voltage) plotting a simulated neuron (average) potential graph. Here, the term *average* means we take the mean of the potential of three neurons' axon in each respective corner. *Refer to `spike_demo.png`.*  
-* Moreover, we calculated the probability of spikes based on the simulated results (average) and made a raster plot.
+* Moreover, we calculated the probability of spikes based on the simulated results (average) and made a raster plot. *Refer to `simulation_demo.png`.*  
 * Now, we only have six results (with no stimulations at all, i.e., `ID=0`) and the spike probability was calculated based on three trials. That is, we have two repetitions only, as shown in the raster plot, which, unlike the experimental data where each circuit each simulation consists of 1800 runs and their spike probabilities were calculated on 180 trials in each repetition.
 * Otherwise, the rest of the work was identical to `Task4-1.ipynb`.
 
