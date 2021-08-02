@@ -3,7 +3,7 @@
 
 In the raster plots, I visualised the spikes recorded from the first circuit `data[0, :]` or `circuit[0]` under the some randomly selected simulation patterns. The data arrays have dimensions of 10 * 25 * 4, which represents 10 repetitions, 25 time units, and 4 electrode at different corners of the circuit (top left (Tl), top right (Tr), bottom right (Br), and bottom left (Bl)). To plot the diagram more easily, I transposed the data arrays into 4 * 25 * 10 and utilised the following four colours: red (R), green (G), blue(B), and orange (O) to represents the four corners of the circuit, respectively. On the x-axis are the time units while the ten repetitions are placed on the y-axis.
 
-### Please download the Jupyter notebook to view the content as GitHub preview will not always show all the contents.
+### Please download the Jupyter notebook to view the contents as GitHub preview will not always show all of them.
 
 **_Update (August 1, 2021) on `Task 4-2.ipynb`_**
 * In this update, we made a notebook that streamlined the entire simulation process, from reading the simulated (voltage) data files to plotting a neuron (average) potential graph. Here, the term *average* means we take the mean of the meausred potential of three neurons' axon in each respective corner. *Refer to `spike_demo.png`.*  
