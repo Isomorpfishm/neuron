@@ -8,11 +8,11 @@ This project is implemented using the [NEURON simulation environment][1] version
 
 
 **Update (August 4, 2021) on `task3-4.hoc`:**
-* .
+* Enhanced `multi_run()` procedure which automated the `run()` and exported data files according to the number specified by the user.
+* The stimulation occured at the 1st, 5th and 25th millisecond, at top left (`neuron[9]`, `neuron[10]`, `neuron[11]`), top right (`neuron[0]`, `neuron[1]`, `neuron[2]`), and bottom right (`neuron[3]`, `neuron[4]`, `neuron[5]`) of the multielectrode array, respectively.
 
 **Update (July 31, 2021) on `task3-3.hoc`:**
 * Modified the `.hoc` code so that it is able to export voltages measured at the axon (normalised distance of 0.25 from the distal end) of all 12 neurons automatically.
-* To mimic the *in vitro* experimental data, the standard deviation and the time constant of excitatory conductance were restored to their default values.
 * Compatible with session file `task3-3.ses`.
 
 **Update (July 27, 2021) on `task3-3.hoc`:**
