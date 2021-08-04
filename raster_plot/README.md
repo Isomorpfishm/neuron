@@ -5,6 +5,12 @@ In the raster plots, I visualised the spikes recorded from the first circuit `da
 
 ### Please download the Jupyter notebook to view the contents as GitHub rendered blob display will not always show all of them.
 
+
+**_Update (August 4, 2021) on `Task 4-2.ipynb`_**
+* In this update, we further enhanced the plotting procedure: we excluded the first 25 milliseconds of the simulation and only considered the second half of the simulation (26-50 milliseconds).
+* Implemented the `distance` argument in the `scipy.signal.find_peaks()` method as discarded unnecessary peaks.
+
+
 **_Update (August 1, 2021) on `Task 4-2.ipynb`_**
 * In this update, we made a notebook that streamlined the entire simulation process, from reading the simulated (voltage) data files to plotting a neuron (average) potential graph. Here, the term *average* means we take the mean of the meausred potential of three neurons' axon in each respective corner. *Refer to `spike_demo.png`.*  
 * Moreover, we calculated the probability of spikes based on the simulated results (average) and made a raster plot. *Refer to `simulation_demo.png`.*  
