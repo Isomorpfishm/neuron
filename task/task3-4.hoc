@@ -3,7 +3,7 @@
 // Seed file: seed.dat
 
 load_file("nrngui.hoc")
-koko = 151
+koko = 1 // this sets the beginning of the seed values taken
 
 //--------------------------------------------------------------------------------------
 //  Access the seed file
@@ -281,7 +281,7 @@ proc mechanism(){ local seed_mec
 		fl[i].tau_i = 10.49*0  			// time const of inhibitory conductance
 		fl[i].g_e0  = 0.0121			// avg excitatory conductance
 		fl[i].g_i0  = 0.0573*0   		// avg inhibitory conductance
-		fl[i].E_e   = 0 				// reversal potential of excitatory conductance
+		fl[i].E_e   = 0 			// reversal potential of excitatory conductance
 		fl[i].E_i   = -75*0        		// reversal potential of inhibitory conductance
 
 		SThcells[i].axon fac[i] = new tmgsyn(0.5)
@@ -294,9 +294,9 @@ proc mechanism(){ local seed_mec
 		fac[i].tau_rec   = 800			// time const of "syp resources" converted from "inactive" to "recovered" state
 		fac[i].tau_facil = 0			// time const of decay of facilitation
 		fac[i].U         = 0.05	(1)		// "facilitation variable", <0, 1>
-		fac[i].u0        = 0.00 (1)     // initial value for the "facilitation variable"
+		fac[i].u0        = 0.00 (1)     	// initial value for the "facilitation variable"
 
-		if (i == 9 || i == 10 || i == 11) {
+		if (i == 6 || i == 7 || i == 8) {
 			// a train of spikes
 			SThcells[i].axon stim[i] = new Ipulse1(0.8)
 			stim[i].del = 1    			// starting time
@@ -306,7 +306,7 @@ proc mechanism(){ local seed_mec
 			stim[i].amp = 0.2			// amplitude of spikes
 		}
 
-		if (i == 0 || i == 1 || i == 2) {
+		if (i == 3 || i == 4 || i == 5) {
 			SThcells[i].axon stim[i] = new Ipulse1(0.8)
 			stim[i].del = 5
 			stim[i].ton = 0.1
@@ -315,7 +315,7 @@ proc mechanism(){ local seed_mec
 			stim[i].amp = 0.2
 		}
 
-		if (i == 3 || i == 4 || i == 5) {
+		if (i == 0 || i == 1 || i == 2) {
 			SThcells[i].axon stim[i] = new Ipulse1(0.8)
 			stim[i].del = 25
 			stim[i].ton = 0.1
@@ -354,7 +354,7 @@ proc run() {
 }
 
 proc multi_run() {
-	for whatever=151, 200 {
+	for whatever=1, 100 {
 		num_run = whatever
 
 		f1 = new File()
